@@ -2760,8 +2760,8 @@
       border-bottom: 1px solid #333;
     }
 
-    .settings-custom-section.text{
-      background-color: #817e7e;
+    .settings-custom-section .text{
+      color: #817e7e;
       font-size:12px;
     }
 
@@ -2828,8 +2828,8 @@
     }
 
     .settings-chip-inner {
-      width: 45px;
-      height: 45px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -2851,14 +2851,15 @@
     }
 
     .custom_chip{
-      width:20px; 
-      height:20px;
+      width:50px; 
+      height:50px;
+      border-radius: 100%;
       background-color: black;
     }
 
     .settings-custom-section {
       display:flex;
-      gap:2px;
+      gap:10px;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
@@ -2879,7 +2880,7 @@
     .settings-input-group {
       display: flex;
       gap: 8px;
-      width: 100%;
+      width: 80%;
       align-items: center;
     }
 
@@ -2890,7 +2891,8 @@
       border-radius: 6px;
       background: #e5e3e3;
       color: #fff;
-      text:black;
+      color:black;
+      height:50px;
       width:100%;
       font-size: 13px;
       font-weight: 400;
@@ -3399,8 +3401,8 @@
               <div class="settings-input-group">
                 <input type="number" id="customAmount" class="settings-custom-input" placeholder="Create Your Chips" min="1" max="9999">
                 <!-- <button class="settings-custom-btn" onclick="handleCustomAmount()">Apply</button> -->
-                 <p class="text">Maximum <br/> php 5,000</p>
               </div>
+              <p class="text">Maximum <br/> php 5,000</p>
             </div>
             
 
@@ -3411,25 +3413,25 @@
                   <div class="settings-chip-inner">
                     <img src="assets/5.png" alt="chip5" />
                   </div>
-                  <span class="settings-chip-label">5</span>
+                  <!-- <span class="settings-chip-label">5</span> -->
                 </button>
                 <button class="settings-chip-btn" data-amount="10" onclick="handleBetAmount('settings', 10)">
                   <div class="settings-chip-inner">
                     <img src="assets/10.png" alt="chip10" />
                   </div>
-                  <span class="settings-chip-label">10</span>
+                  <!-- <span class="settings-chip-label">10</span> -->
                 </button>
                 <button class="settings-chip-btn" data-amount="25" onclick="handleBetAmount('settings', 25)">
                   <div class="settings-chip-inner">
                     <img src="assets/25.png" alt="chip25" />
                   </div>
-                  <span class="settings-chip-label">25</span>
+                  <!-- <span class="settings-chip-label">25</span> -->
                 </button>
                 <button class="settings-chip-btn" data-amount="50" onclick="handleBetAmount('settings', 50)">
                   <div class="settings-chip-inner">
                     <img src="assets/50.png" alt="chip50" />
                   </div>
-                  <span class="settings-chip-label">50</span>
+                  <!-- <span class="settings-chip-label">50</span> -->
                 </button>
               </div>
               
@@ -3438,25 +3440,25 @@
                   <div class="settings-chip-inner">
                     <img src="assets/100.png" alt="chip100" />
                   </div>
-                  <span class="settings-chip-label">100</span>
+                  <!-- <span class="settings-chip-label">100</span> -->
                 </button>
                 <button class="settings-chip-btn" data-amount="250" onclick="handleBetAmount('settings', 250)">
                   <div class="settings-chip-inner">
                     <img src="assets/250.png" alt="chip250" />
                   </div>
-                  <span class="settings-chip-label">250</span>
+                  <!-- <span class="settings-chip-label">250</span> -->
                 </button>
                 <button class="settings-chip-btn" data-amount="500" onclick="handleBetAmount('settings', 500)">
                   <div class="settings-chip-inner">
                     <img src="assets/500.png" alt="chip500" />
                   </div>
-                  <span class="settings-chip-label">500</span>
+                  <!-- <span class="settings-chip-label">500</span> -->
                 </button>
                 <button class="settings-chip-btn" data-amount="1000" onclick="handleBetAmount('settings', 1000)">
                   <div class="settings-chip-inner">
                     <img src="assets/1000.png" alt="chip1000" />
                   </div>
-                  <span class="settings-chip-label">1000</span>
+                  <!-- <span class="settings-chip-label">1000</span> -->
                 </button>
               </div>
             </div>
