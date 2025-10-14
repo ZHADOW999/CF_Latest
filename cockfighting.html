@@ -2813,7 +2813,7 @@
       flex-direction: column;
       align-items: center;
       gap: 5px;
-      padding: 5px;
+      padding: 1px;
       border-radius: 10px;
       transition: all 0.3s ease;
       position: relative;
@@ -2829,8 +2829,8 @@
     }
 
     .settings-chip-inner {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -2895,7 +2895,7 @@
       color:black;
       height:50px;
       width:100%;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 400;
     }
 
@@ -3938,6 +3938,9 @@
       if (menu) menu.classList.remove("show");
       showToast(`Opening ${page}...`, "info");
       // Add your page navigation logic here
+            setTimeout(() => {
+        window.location.href = `${page}.html`;
+      }, 500);
     }
 
     // Navigation handler
@@ -3946,6 +3949,9 @@
       if (menu) menu.classList.remove("show");
       showToast(`Navigating to ${page}...`, "info");
       // Add your navigation logic here
+      setTimeout(() => {
+        window.location.href = `${page}.html`;
+      }, 500);
     }
 
     // Logout handler
