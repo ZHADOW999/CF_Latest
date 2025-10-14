@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+        background: #000;
+        min-height: 100vh;
+      }
+
+      /* Toast Notifications */
+      .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+      }
+
+      .toast {
+        background: #1e293b;
+        color: #f1f5f9;
+        border: 1px solid #334155;
+        padding: 16px 24px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease-out;
+        min-width: 250px;
+      }
+
+      .toast.error {
+        background: #dc2626;
+        border-color: #991b1b;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+      }
+
+      .toast.removing {
+        animation: slideOut 0.3s ease-in forwards;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(to right, #1e293b, #334155);
+        padding: 16px 24px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #475569;
+      }
+
+      .header.visible {
+        display: flex;
+      }
+
+      .header-title {
+        color: #f59e0b;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .header-user {
+        color: #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .logout-btn {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+
+      .logout-btn:hover {
+        background: #b91c1c;
+      }
+
+      /* Page Views */
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      /* Image Slider */
+      .slider-container {
+        position: relative;
+        height: 70vh;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .slider-wrapper {
+        height: 100%;
+        width: 100%;
+        cursor: grab;
+        user-select: none;
+      }
+
+      .slider-wrapper:active {
+        cursor: grabbing;
+      }
+
+      .slider-track {
+        display: flex;
+        height: 100%;
+        transition: transform 0.5s ease-out;
+      }
+
+      .slider-track.dragging {
+        transition: none;
+      }
+
+      .slide {
+        min-width: 100%;
+        height: 100%;
+        flex-shrink: 0;
+      }
+
+      .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .slider-dots {
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 12px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #eab308;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .dot.active {
+        background: #eab308;
+        box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.3);
+        transform: scale(1.1);
+      }
+
+      .slider-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .slider-container:hover .slider-arrow {
+        opacity: 1;
+      }
+
+      .slider-arrow:hover {
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .slider-arrow.left {
+        left: 16px;
+      }
+
+      .slider-arrow.right {
+        right: 16px;
+      }
+
+      /* Login Form */
+      .login-overlay {
+        position: absolute;
+        top: 80px;
+        right: 40px;
+        z-index: 100;
+        width: 320px;
+      }
+
+      .login-form {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 16px;
+        border-radius: 8px;
+      }
+
+      .error-message {
+        margin-bottom: 16px;
+        padding: 12px;
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+        color: #dc2626;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .form-group {
+        background: white;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group:first-of-type {
+        border-bottom: 2px solid #e5e7eb;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .form-group:last-of-type {
+        border-radius: 0 0 8px 8px;
+      }
+
+      .form-group label {
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #374151;
+      }
+
+      .form-group input {
+        margin-top: 8px;
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .form-group input:focus {
+        border-color: #eab308;
+        box-shadow: 0 0 0 1px #eab308;
+      }
+
+      .password-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .password-wrapper input {
+        flex: 1;
+      }
+
+      .toggle-password {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8px;
+        transition: border-color 0.2s;
+      }
+
+      .toggle-password:hover {
+        border-color: #eab308;
+      }
+
+      .login-btn {
+        width: 100%;
+        margin-top: 16px;
+        padding: 10px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+        border: 2px solid #d97706;
+        background: linear-gradient(to bottom, #eab308, #fde047);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .login-btn:hover:not(:disabled) {
+        background: #d97706;
+      }
+
+      .login-btn:disabled {
+        background: #9ca3af;
+        border-color: #9ca3af;
+        cursor: not-allowed;
+      }
+
+      .signup-link {
+        text-align: center;
+        margin-top: 8px;
+        font-size: 12px;
+      }
+
+      .signup-link a {
+        color: #eab308;
+        text-decoration: none;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Calendar */
+      .calendar-container {
+        background: linear-gradient(to bottom right, #1e293b, #0f172a, #1e3a8a);
+        min-height: 100vh;
+        padding: 16px;
+      }
+
+      .calendar-wrapper {
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
+      .calendar {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(4px);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        border: 1px solid #475569;
+      }
+
+      .calendar-header {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        background: rgba(51, 65, 85, 0.5);
+      }
+
+      .calendar-header-day {
+        padding: 16px;
+        text-align: center;
+        color: #cbd5e1;
+        font-weight: 500;
+        border-right: 1px solid #475569;
+      }
+
+      .calendar-header-day:last-child {
+        border-right: none;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+      }
+
+      .calendar-day {
+        min-height: 128px;
+        padding: 8px;
+        border-right: 1px solid #475569;
+        border-bottom: 1px solid #475569;
+        position: relative;
+      }
+
+      .calendar-day:nth-child(7n) {
+        border-right: none;
+      }
+
+      .calendar-day.current-month {
+        background: rgba(30, 41, 59, 0.4);
+      }
+
+      .calendar-day.other-month {
+        background: rgba(15, 23, 42, 0.6);
+      }
+
+      .calendar-day.highlighted::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #f97316;
+      }
+
+      .day-number {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .day-number.current {
+        color: white;
+      }
+
+      .day-number.highlighted {
+        color: #fb923c;
+      }
+
+      .day-number.other {
+        color: #64748b;
+      }
+
+      .events {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .event {
+        font-size: 12px;
+        background: rgba(6, 182, 212, 0.2);
+        color: #67e8f9;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: 1px solid rgba(6, 182, 212, 0.3);
+      }
+
+      .event-name {
+        font-weight: 600;
+      }
+
+      .event-time {
+        color: #22d3ee;
+      }
+
+      /* Utility */
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+      <div class="header-title">Cockfighting Calendar</div>
+      <div class="header-user">
+        <span id="usernameDisplay"></span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Home Page -->
+    <div class="page active" id="homePage">
+      <!-- Image Slider -->
+      <div class="slider-container">
+        <div class="slider-wrapper" id="sliderWrapper">
+          <div class="slider-track" id="sliderTrack">
+            <div class="slide">
+              <img src="assets/cache.jpeg" alt="Slide 1" />
+            </div>
+            <div class="slide">
+              <img src="assets/cache_2.jpeg" alt="Slide 2" />
+            </div>
+            <div class="slide">
+              <img src="assets/cache_3.jpeg" alt="Slide 3" />
+            </div>
+            <div class="slide">
+              <img src="assets/cache_4.jpeg" alt="Slide 4" />
+            </div>
+          </div>
+        </div>
+
+        <div class="slider-dots" id="sliderDots"></div>
+
+        <button class="slider-arrow left" onclick="prevSlide()">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button class="slider-arrow right" onclick="nextSlide()">
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        <!-- Login Form -->
+        <div class="login-overlay">
+          <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+            <div class="error-message hidden" id="errorMessage"></div>
+
+            <div class="form-group">
+              <label>username</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>password</label>
+              <div class="password-wrapper">
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="toggle-password"
+                  onclick="togglePassword()"
+                >
+                  <svg
+                    id="eyeIcon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            <p class="signup-link">
+              Don't have an account? <a href="#">Sign up</a>
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="calendar-container">
+        <div class="calendar-wrapper">
+          <div class="calendar">
+            <div class="calendar-header">
+              <div class="calendar-header-day">Mon</div>
+              <div class="calendar-header-day">Tue</div>
+              <div class="calendar-header-day">Wed</div>
+              <div class="calendar-header-day">Thu</div>
+              <div class="calendar-header-day">Fri</div>
+              <div class="calendar-header-day">Sat</div>
+              <div class="calendar-header-day">Sun</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cockfighting Page -->
+    <div class="page" id="cockfightingPage">
+      <div style="padding: 40px; color: white; text-align: center">
+        <h1>Cockfighting Arena</h1>
+        <p>Protected content - You are logged in!</p>
+      </div>
+    </div>
+
+    <script>
+      // Event Data
+      const eventData = {
+        29: [
+          { name: "PC2", time: "13:00", code: "F17" },
+          { name: "TH7A", time: "14:00", code: "F33" },
+          { name: "TH7B", time: "14:00", code: "F41" },
+          { name: "TH7C", time: "14:00", code: "F23" },
+          { name: "PC3", time: "17:00", code: "F91" },
+          { name: "TA1", time: "18:00", code: "F45" },
+        ],
+        30: [
+          { name: "CPC4", time: "09:00", code: "F23" },
+          { name: "CPC5", time: "09:00", code: "F48" },
+          { name: "PC1", time: "09:00", code: "F79" },
+          { name: "CJ2", time: "10:00", code: "F81" },
+          { name: "PC3", time: "17:00", code: "F97" },
+        ],
+        1: [
+          { name: "CPC5", time: "09:00", code: "F50" },
+          { name: "CPC4", time: "10:00", code: "F50" },
+          { name: "CPC2", time: "12:00", code: "F50" },
+          { name: "CPC3", time: "12:00", code: "F50" },
+        ],
+      };
+
+      // Add remaining days (2-26) with similar structure
+      for (let day = 2; day <= 26; day++) {
+        eventData[day] = [
+          { name: day % 2 === 0 ? "CPC2" : "CPC1", time: "12:00", code: "F50" },
+          { name: "CPC3", time: "12:00", code: "F50" },
+        ];
+      }
+
+      // Authentication State (using localStorage)
+      const authState = {
+        isAuthenticated: false,
+        username: null,
+        uniqueid: null,
+        sessId: null,
+      };
+
+      // Toast Notifications
+      function showToast(message, type = "info") {
+        const container = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.add("removing");
+          setTimeout(() => toast.remove(), 300);
+        }, 4000);
+      }
+
+      // Image Slider
+      let currentSlide = 0;
+      const totalSlides = 4;
+      let slideInterval;
+      let touchStartX = null;
+      let touchEndX = null;
+      let isDragging = false;
+      let dragStartX = null;
+      let dragOffset = 0;
+
+      function initSlider() {
+        const dotsContainer = document.getElementById("sliderDots");
+        for (let i = 0; i < totalSlides; i++) {
+          const dot = document.createElement("button");
+          dot.className = `dot ${i === 0 ? "active" : ""}`;
+          dot.onclick = () => goToSlide(i);
+          dotsContainer.appendChild(dot);
+        }
+
+        startAutoSlide();
+        setupSliderEvents();
+      }
+
+      function updateSlider() {
+        const track = document.getElementById("sliderTrack");
+        const offset = (dragOffset / window.innerWidth) * 100;
+        track.style.transform = `translateX(${-currentSlide * 100 + offset}%)`;
+
+        const dots = document.querySelectorAll(".dot");
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("active", index === currentSlide);
+        });
+      }
+
+      function goToSlide(index) {
+        currentSlide = index;
+        dragOffset = 0;
+        updateSlider();
+        resetAutoSlide();
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        dragOffset = 0;
+        updateSlider();
+        resetAutoSlide();
+      }
+
+      function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        dragOffset = 0;
+        updateSlider();
+        resetAutoSlide();
+      }
+
+      function startAutoSlide() {
+        slideInterval = setInterval(nextSlide, 4000);
+      }
+
+      function resetAutoSlide() {
+        clearInterval(slideInterval);
+        startAutoSlide();
+      }
+
+      function setupSliderEvents() {
+        const wrapper = document.getElementById("sliderWrapper");
+        const track = document.getElementById("sliderTrack");
+
+        // Touch events
+        wrapper.addEventListener("touchstart", (e) => {
+          touchStartX = e.touches[0].clientX;
+          track.classList.add("dragging");
+        });
+
+        wrapper.addEventListener("touchmove", (e) => {
+          if (!touchStartX) return;
+          touchEndX = e.touches[0].clientX;
+          dragOffset = touchEndX - touchStartX;
+          updateSlider();
+        });
+
+        wrapper.addEventListener("touchend", () => {
+          if (!touchStartX || !touchEndX) {
+            dragOffset = 0;
+            track.classList.remove("dragging");
+            return;
+          }
+
+          const distance = touchStartX - touchEndX;
+          if (Math.abs(distance) > 50) {
+            if (distance > 0) nextSlide();
+            else prevSlide();
+          } else {
+            dragOffset = 0;
+            updateSlider();
+          }
+
+          touchStartX = null;
+          touchEndX = null;
+          track.classList.remove("dragging");
+        });
+
+        // Mouse events
+        wrapper.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          isDragging = true;
+          dragStartX = e.clientX;
+          dragOffset = 0;
+          track.classList.add("dragging");
+        });
+
+        wrapper.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+          dragOffset = e.clientX - dragStartX;
+          updateSlider();
+        });
+
+        wrapper.addEventListener("mouseup", () => {
+          if (!isDragging) {
+            track.classList.remove("dragging");
+            return;
+          }
+
+          if (Math.abs(dragOffset) > 50) {
+            if (dragOffset < 0) nextSlide();
+            else prevSlide();
+          } else {
+            dragOffset = 0;
+            updateSlider();
+          }
+
+          isDragging = false;
+          dragStartX = null;
+          track.classList.remove("dragging");
+        });
+
+        wrapper.addEventListener("mouseleave", () => {
+          if (isDragging) {
+            isDragging = false;
+            dragOffset = 0;
+            updateSlider();
+            track.classList.remove("dragging");
+          }
+        });
+      }
+
+      // Calendar
+      function initCalendar() {
+        const grid = document.getElementById("calendarGrid");
+        const currentDate = new Date(2025, 8, 30); // September 30, 2025
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        const firstDay = new Date(year, month, 1);
+        const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
+        const prevMonth = new Date(year, month, 0);
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        let days = [];
+
+        // Previous month days
+        for (let i = startDay - 1; i >= 0; i--) {
+          days.push({
+            day: prevMonth.getDate() - i,
+            isCurrentMonth: false,
+          });
+        }
+
+        // Current month days
+        for (let i = 1; i <= daysInMonth; i++) {
+          days.push({
+            day: i,
+            isCurrentMonth: true,
+          });
+        }
+
+        // Next month days
+        const remainingDays = 42 - days.length;
+        for (let i = 1; i <= remainingDays; i++) {
+          days.push({
+            day: i,
+            isCurrentMonth: false,
+          });
+        }
+
+        days.forEach((dayObj) => {
+          const dayEl = document.createElement("div");
+          dayEl.className = `calendar-day ${
+            dayObj.isCurrentMonth ? "current-month" : "other-month"
+          }`;
+
+          if (dayObj.isCurrentMonth && dayObj.day === 30) {
+            dayEl.classList.add("highlighted");
+          }
+
+          const dayNumber = document.createElement("div");
+          dayNumber.className = `day-number ${
+            dayObj.isCurrentMonth
+              ? dayObj.day === 30
+                ? "highlighted"
+                : "current"
+              : "other"
+          }`;
+          dayNumber.textContent = dayObj.day;
+          dayEl.appendChild(dayNumber);
+
+          if (dayObj.isCurrentMonth && eventData[dayObj.day]) {
+            const eventsContainer = document.createElement("div");
+            eventsContainer.className = "events";
+
+            eventData[dayObj.day].forEach((event) => {
+              const eventEl = document.createElement("div");
+              eventEl.className = "event";
+              eventEl.innerHTML = `
+                <div class="event-name">${event.name}</div>
+                <div class="event-time">${event.time} ${event.code}</div>
+              `;
+              eventsContainer.appendChild(eventEl);
+            });
+
+            dayEl.appendChild(eventsContainer);
+          }
+
+          grid.appendChild(dayEl);
+        });
+      }
+
+      // Login
+      function togglePassword() {
+        const input = document.getElementById("password");
+        const icon = document.getElementById("eyeIcon");
+
+        if (input.type === "password") {
+          input.type = "text";
+          icon.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+          `;
+        } else {
+          input.type = "password";
+          icon.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          `;
+        }
+      }
+
+      function generateUniqueId() {
+        const chars =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        const length = Math.floor(Math.random() * 3) + 8;
+        let result = "";
+        for (let i = 0; i < length; i++) {
+          result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+      }
+
+      async function handleLogin(e) {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const errorMsg = document.getElementById("errorMessage");
+        const loginBtn = document.getElementById("loginBtn");
+
+        if (!username || !password) {
+          errorMsg.textContent = "Please enter both username and password";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Logging in...";
+        errorMsg.classList.add("hidden");
+
+        try {
+          const uniqueid = generateUniqueId();
+
+          const payload = {
+            operatorId: "TSTAG",
+            username: username,
+            password: password,
+            language: "zh-cn",
+            uniqueid: uniqueid,
+          };
+
+          // Use your actual API endpoint
+          const api = "https://apih5.ho8.net/loginuidpid.php";
+          const response = await fetch(api, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await response.json();
+          console.log("Login response:", data);
+
+          if (data.code === "0") {
+            const lobbyUrl = data.lobby_url;
+            const sessIdMatch = lobbyUrl.match(/sess_id=([^&]+)/);
+
+            if (sessIdMatch) {
+              const sessId = sessIdMatch[1];
+
+              // Update local authState
+              authState.isAuthenticated = true;
+              authState.username = username;
+              authState.uniqueid = uniqueid;
+              authState.sessId = sessId;
+
+              // Store auth data in localStorage
+              localStorage.setItem(
+                "authState",
+                JSON.stringify({
+                  isAuthenticated: true,
+                  username: username,
+                  uniqueid: uniqueid,
+                  sessId: sessId,
+                })
+              );
+
+              showToast("Login successful! Redirecting...", "info");
+
+              // Redirect immediately after successful login
+              setTimeout(() => {
+                window.location.href = "cockfighting.html";
+              }, 1000);
+            } else {
+              errorMsg.textContent =
+                "Invalid response format. Please try again.";
+              errorMsg.classList.remove("hidden");
+              showToast("Login failed: Invalid session data", "error");
+            }
+          } else {
+            const msg = data.msg || "Login failed. Please try again.";
+            errorMsg.textContent = msg;
+            errorMsg.classList.remove("hidden");
+            showToast("Login failed: " + msg, "error");
+          }
+        } catch (error) {
+          console.error("Login error:", error);
+          const msg =
+            "Network error. Please check your connection and try again.";
+          errorMsg.textContent = msg;
+          errorMsg.classList.remove("hidden");
+          showToast(msg, "error");
+        } finally {
+          loginBtn.disabled = false;
+          loginBtn.textContent = "Login";
+        }
+      }
+
+      // Remove the navigateTo function entirely and replace with direct redirect
+      function logout() {
+        localStorage.removeItem("authState");
+        authState.isAuthenticated = false;
+        authState.username = null;
+        authState.uniqueid = null;
+        authState.sessId = null;
+
+        updateAuthUI();
+        showToast("Logged out successfully", "info");
+      }
+
+      function updateAuthUI() {
+        const header = document.getElementById("header");
+        const usernameDisplay = document.getElementById("usernameDisplay");
+
+        if (authState.isAuthenticated) {
+          header.classList.add("visible");
+          usernameDisplay.textContent = `Welcome, ${authState.username}`;
+        } else {
+          header.classList.remove("visible");
+        }
+      }
+
+      // Initialize
+      window.onload = function () {
+        initSlider();
+        initCalendar();
+        updateAuthUI();
+      };
+    </script>
+  </body>
+</html>

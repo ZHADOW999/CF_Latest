@@ -1,0 +1,4882 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Casino Betting</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #e6e6e6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+      width: 100%;
+      min-width: 320px;
+    }
+
+    /* Global top bar */
+    .topbar {
+      height: 48px;
+      background-color: #0d0d0d;
+      border-bottom: 1px solid #1f1f1f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 10px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      height: 24px;
+      width: auto;
+      margin-right: 12px;
+    }
+
+    .maintenance {
+      color: #b8b8b8;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #e6e6e6;
+    }
+
+    .avatar {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #e6e6e6;
+      display: inline-block;
+    }
+
+    .copy {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      border: 1px solid #888;
+      position: relative;
+    }
+
+    .copy::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left: 3px;
+      top: 3px;
+      border: 1px solid #888;
+    }
+
+    .hamburger {
+      width: 16px;
+      height: 12px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hamburger::before,
+    .hamburger::after,
+    .hamburger span {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #e6e6e6;
+    }
+
+    .hamburger::before {
+      top: 0;
+    }
+
+    .hamburger span {
+      top: 5px;
+    }
+
+    .hamburger::after {
+      bottom: 0;
+    }
+
+    /* Hamburger menu dropdown */
+    .hamburger-container {
+      position: relative;
+    }
+
+    .hamburger-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 12px;
+      width: 200px;
+      background: #c79f63;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 10000;
+      overflow: hidden;
+    }
+
+    .hamburger-menu.show {
+      display: block;
+    }
+
+    .hamburger-menu-item {
+      width: 100%;
+      background: transparent;
+      color: #1a1a1a;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 12px 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hamburger-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .hamburger-menu-item:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .hamburger-menu-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Language dropdown */
+    .lang {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .lang:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .lang .globe {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+    }
+
+    .lang .caret {
+      transform: translateY(1px);
+      transition: transform 0.2s;
+    }
+
+    .lang[aria-expanded="true"] .caret {
+      transform: translateY(1px) rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      margin-top: 8px;
+      background: #c79f63;
+      color: #1b1b1b;
+      border-radius: 6px;
+      min-width: 180px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      display: none;
+      overflow: hidden;
+      z-index: 10000;
+    }
+
+    .lang-menu.show {
+      display: block !important;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .lang-item {
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .lang-item:hover {
+      background: #d8b77e;
+    }
+
+    .lang-item .check {
+      width: 14px;
+      text-align: center;
+      opacity: 0;
+      color: #1b1b1b;
+    }
+
+    .lang-item.selected .check {
+      opacity: 1;
+    }
+
+    /* Left mini header (inside sidebar) */
+    .left-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: #1b1007;
+    }
+
+    .reference-image {
+      height: 30px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Mode Selector Component */
+    .mode-selector {
+      display: flex;
+      align-items: center;
+      padding: 0px 8px 0px 0px;
+      background-color: #1b1007;
+      border-bottom: 1px solid #000;
+      gap: 8px;
+    }
+
+    .mode-text {
+      color: #ff8c00;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: monospace;
+      margin-left: auto;
+      margin-right: 8px;
+    }
+
+    .mode-square-container {
+      position: relative;
+    }
+
+    .mode-square {
+      width: 23px !important;
+      height: 23px;
+      background-color: #ff8c00;
+      margin-right: 8px;
+      display: block;
+      min-width: 23px;
+      max-width: 23px;
+      border-radius: 1px;
+      cursor: pointer;
+    }
+
+    /* Mode square dropdown menu */
+    .mode-square-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 180px;
+      background: #d87d1e;
+      border-radius: 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 10000;
+      overflow: hidden;
+    }
+
+    .mode-square-menu.show {
+      display: block;
+    }
+
+    .mode-square-menu-item {
+      width: 100%;
+      background: transparent;
+      color: #ffffff;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 12px 16px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .mode-square-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .mode-square-menu-item:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .pause-icon-container {
+      position: relative;
+      width: 25px;
+      height: 25px;
+    }
+
+    .pause-icon {
+      width: 25px;
+      height: 25px;
+      background-color: #8b4513;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+    }
+
+    .pause-icon .bar {
+      width: 10px;
+      height: 20px;
+      background-color: #1b1007;
+      border-radius: 1px;
+    }
+
+    /* Pause icon dropdown menu (moved from info icon) */
+    .pause-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 8px;
+      width: 180px;
+      background: #ff8c00;
+      border-radius: 6px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 10000;
+      overflow: hidden;
+    }
+
+    .pause-menu.show {
+      display: block;
+    }
+
+    .pause-menu-item {
+      width: 100%;
+      background: transparent;
+      color: #000;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 10px 14px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .pause-menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .pause-menu-item:hover {
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    /* Main Container */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      height: calc(100vh - 48px);
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      /* background-color: #0d0d0d; */
+    }
+
+    /* Left Sidebar */
+    .left-sidebar {
+      width: 360px;
+      background-color: #2c2c2c;
+      color: #eaeaea;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #1f1f1f;
+      flex-shrink: 0;
+    }
+
+    /* Sidebar Logo Container */
+    .sidebar-logo-container {
+      width: 100%;
+      padding: 8px 12px;
+      background-color: #1d1d1d;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .sidebar-logo {
+      height: 24px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Sidebar Top Buttons */
+    .sidebar-top-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background-color: #1d1d1d;
+      border-bottom: 1px solid #000;
+    }
+
+    .balance-button {
+      background-color: #f5f5f5;
+      color: #333333;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      height: 28px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: all 0.2s ease;
+    }
+
+    .balance-button:active {
+      transform: scale(0.95);
+      background-color: #e0e0e0;
+    }
+
+    .amount-display {
+      background-color: #404040;
+      margin-left: 5px;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      min-width: 60px;
+      justify-content: center;
+      letter-spacing: 0.5px;
+    }
+
+    .language-button {
+      background-color: #ff8c00;
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      margin-left: 20px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      height: 28px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: all 0.2s ease;
+    }
+
+    .language-button:active {
+      transform: scale(0.95);
+      background-color: #e67e00;
+    }
+
+    /* Override when in right header - make narrower, dark with orange outline */
+    .right-header .language-button {
+      background-color: #1a1a1a;
+      color: #fe7902;
+      border: 1px solid #fe7902;
+      padding: 4px 10px;
+      margin-left: 12px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 600;
+      height: 24px;
+      min-width: 90px;
+      justify-content: center;
+    }
+
+    .right-header .language-button:hover {
+      background-color: #252525;
+    }
+
+    .right-header .language-button:active {
+      transform: scale(0.95);
+      background-color: #2a2a2a;
+    }
+
+    .language-button .chevron {
+      font-size: 10px;
+      margin-left: 2px;
+    }
+
+    .right-header .language-button .chevron {
+      font-size: 9px;
+      margin-left: 4px;
+    }
+
+    /* Right header language dropdown (match dark/orange style) */
+    .language-dropdown-container {
+      position: relative;
+      z-index: 2000;
+      /* keep above content below */
+    }
+
+    .language-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 6px;
+      width: 90px;
+      /* match button min-width */
+      background: #0f0f0f;
+      /* near-black to match target */
+      border: 1px solid #fe7902;
+      /* orange outline */
+      border-radius: 0;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+      display: none;
+      z-index: 5000;
+      padding: 2px 0;
+      overflow: hidden;
+    }
+
+    .language-dropdown.show {
+      display: block;
+    }
+
+    .language-item {
+      width: 100%;
+      background: #0f0f0f;
+      color: #cfcfcf;
+      border: none;
+      padding: 6px 10px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 18px;
+      box-shadow: inset 0 0 0 1px #fe7902;
+      /* thin orange rectangle per item */
+    }
+
+    .language-item+.language-item {
+      margin-top: 2px;
+    }
+
+    .language-item:hover {
+      background: #161616;
+      color: #ffffff;
+    }
+
+    .language-item.selected {
+      color: #fe7902;
+      font-weight: 700;
+    }
+
+    .language-button.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Right Content Area */
+    .right-content {
+      flex: 1;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 500px;
+      min-width: 0;
+      /* margin: 0 auto; */
+    }
+
+    /* Three sections for white area */
+    .top-section {
+      background-image: url("assets/live_image.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 35%;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .live-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .middle-section {
+      height: 15%;
+      background-color: #ffffff;
+      background-image: url("assets/round_image.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0;
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Tabbar Styles */
+    :root {
+      --bar-h: 44px;
+      --tab-w: 116px;
+      --gap-overlap: -14px;
+      /* overlap to show diagonal separations */
+      --cut: 10%;
+      /* trapezoid cut amount (left/right) */
+
+      --bar-bg: #3a3a3a;
+      --bar-top-gloss: #ffffff22;
+      --bar-bottom: #000000cc;
+
+      --tab-top: #3a3a3a;
+      --tab-bot: #232323;
+
+      --dash: #e9e9e9;
+    }
+
+    /* BAR (rounded, glossy, deep) */
+    .tabbar {
+      height: var(--bar-h);
+      width: 100%;
+      display: flex;
+      align-items: stretch;
+      padding: 2px 4px;
+      background: linear-gradient(180deg,
+          #2a2a2a 0%,
+          #1a1a1a 50%,
+          #0a0a0a 100%);
+      border-radius: var(--radius);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -15px 25px rgba(0, 0, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.8);
+      gap: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-bottom: 2px solid var(--green1);
+    }
+
+    .tabbar::before {
+      /* glossy strip near the top */
+      content: "";
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      top: 5px;
+      height: 12px;
+      border-radius: 10px;
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 100%);
+      pointer-events: none;
+    }
+
+    /* TAB (true trapezoid via clip-path) */
+    .tabbar .tab {
+      position: relative;
+      flex: 1 1 0;
+      /* Each tab grows equally to share available space */
+      min-width: 0;
+      /* Allow flex items to shrink below content size */
+      height: 100%;
+      border: 0;
+      outline: none;
+      padding: 0 28px;
+      color: #b0b0b0;
+      background: radial-gradient(ellipse 130% 100% at 50% 0%,
+          rgba(255, 255, 255, 0.15) 0%,
+          transparent 50%),
+        linear-gradient(180deg,
+          #3a3a3a 0%,
+          #2a2a2a 20%,
+          #1f1f1f 60%,
+          #0f0f0f 100%);
+      clip-path: polygon(var(--cut) 0,
+          100% 0,
+          calc(100% - var(--cut)) 100%,
+          0 100%);
+      border-radius: 10px;
+      /* still gives soft edges to the trapezoid */
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.8),
+        inset 2px 8px 15px rgba(0, 0, 0, 0.7),
+        inset -2px 8px 15px rgba(0, 0, 0, 0.7), 0 3px 8px rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      overflow: hidden;
+      transition: background 0.3s ease, box-shadow 0.3s ease,
+        transform 0.1s ease;
+    }
+
+    /* right-edge diagonal bevel / separator */
+    .tabbar .tab::after {
+      content: "";
+      position: absolute;
+      right: -2px;
+      top: -10%;
+      bottom: -10%;
+      width: 18px;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          #00000070 55%,
+          transparent 100%),
+        linear-gradient(180deg, #00000055, transparent 45%, #00000055);
+      filter: blur(1px);
+      pointer-events: none;
+    }
+
+    /* top inner sheen */
+    .tabbar .tab::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0.1) 20%,
+          transparent 50%);
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    /* overlap tabs to tighten joints (shows the bevel) */
+    /* .tab + .tab {
+        margin-left: var(--gap-overlap);
+      } */
+    .tabbar .tab+.tab {
+      margin-left: var(--gap-overlap);
+    }
+
+    /* CONTENT */
+    .tabbar .tab>span {
+      display: inline-block;
+      font: 800 16px/1 system-ui, sans-serif;
+      letter-spacing: 0.3px;
+      transform: translateY(1px);
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .tabbar .tab:not(.tab--active)>span {
+      color: var(--dash);
+      /* tiny dash color */
+      font-weight: 900;
+    }
+
+    /* ACTIVE (left green) */
+    .tabbar .tab--active {
+      background: radial-gradient(ellipse 130% 100% at 50% 0%,
+          rgba(255, 255, 255, 0.25) 0%,
+          transparent 45%),
+        linear-gradient(180deg,
+          #ed2517 0%,
+          #e41e0f 20%,
+          #df0c0c 50%,
+          #d6230b 100%) !important;
+      color: #fff !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.8),
+        inset 2px 8px 15px rgba(0, 0, 0, 0.4),
+        inset -2px 8px 15px rgba(0, 0, 0, 0.4), 0 3px 8px rgba(0, 0, 0, 0.7),
+        0 0 20px rgba(92, 184, 92, 0.4);
+    }
+
+    .tabbar .tab--active::after {
+      /* darker diagonal on right of active tab for depth */
+      background: linear-gradient(90deg,
+          transparent 0%,
+          #00000090 60%,
+          transparent 100%),
+        linear-gradient(180deg, #00000070, transparent 45%, #00000070);
+    }
+
+    .tabbar .tab--active>span {
+      color: #ffffff !important;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Focus states - remove outline */
+    .tabs-container .tab:focus,
+    .tabbar .tab:focus {
+      outline: none;
+    }
+
+    /* subtle interactions */
+    .tabbar .tab:hover:not(.tab--active) {
+      background: radial-gradient(ellipse 130% 100% at 50% 0%,
+          rgba(255, 255, 255, 0.2) 0%,
+          transparent 50%),
+        linear-gradient(180deg,
+          #454545 0%,
+          #353535 20%,
+          #2a2a2a 60%,
+          #1a1a1a 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.8),
+        inset 2px 8px 15px rgba(0, 0, 0, 0.6),
+        inset -2px 8px 15px rgba(0, 0, 0, 0.6), 0 3px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .tabbar .tab:active {
+      transform: translateY(1px);
+    }
+
+    /* Endcap - fills remaining space to rounded right edge */
+    .endcap {
+      flex: 1 1 0;
+      /* Takes 1 unit (20% when there are 4 tabs taking 4 units = 80%) */
+      min-width: 0;
+      height: 100%;
+      position: relative;
+      margin-left: -14px;
+      /* overlap like tabs */
+      background: radial-gradient(ellipse 130% 100% at 50% 0%,
+          rgba(255, 255, 255, 0.08) 0%,
+          transparent 50%),
+        linear-gradient(180deg,
+          #3a3a3a 0%,
+          #2a2a2a 20%,
+          #1f1f1f 60%,
+          #0f0f0f 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.8),
+        inset 2px 8px 15px rgba(0, 0, 0, 0.7);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      /* rounded right edge */
+
+      /* left side diagonal cut, right side straight to bar edge */
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, 0 100%);
+      overflow: hidden;
+    }
+
+    /* subtle left-edge bevel to match tab separators */
+    .endcap::after {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: -10%;
+      bottom: -10%;
+      width: 18px;
+      background: linear-gradient(270deg,
+          transparent 0%,
+          #0000007a 55%,
+          transparent 100%),
+        linear-gradient(180deg, #00000055, transparent 45%, #00000055);
+      filter: blur(1px);
+      pointer-events: none;
+    }
+
+    /* glossy top highlight like the bar */
+    .endcap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #ffffff18 0%, transparent 38%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* .bottom-section {
+        height: 25%;
+        background-color: #ffffff;
+      } */
+
+    /* Right Header with buttons */
+    .right-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 8px 16px;
+      background-color: #1d1d1d;
+      height: 40px;
+    }
+
+    /* Tabs Section */
+    .tabs-container {
+      display: flex;
+      border-bottom: 1px solid #1f1f1f;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      cursor: pointer;
+      background: #3a3a3a;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cfcfcf;
+      border-right: 1px solid #1f1f1f;
+      position: relative;
+      text-transform: none;
+    }
+
+    .tab.active {
+      background-color: #fe7902;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #fe7902;
+    }
+
+    /* Today Total Section */
+    .today-total-section {
+      padding: 10px 12px;
+      background-color: #1f1f1f;
+      border-bottom: 1px solid #333;
+      cursor: pointer;
+    }
+
+    .today-total-header {
+      display: flex;
+      align-items: center;
+      color: #ff8c1a;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .today-total-header .refresh-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff8c1a;
+      /* default orange */
+    }
+
+    .today-total-header .refresh-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transition: color 0.2s ease;
+    }
+
+    .today-total-section:hover .today-total-header .refresh-icon {
+      color: #ffffff;
+      /* hover white */
+    }
+
+    /* Table Section */
+    .table-container {
+      padding: 0;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #1a1a1a;
+    }
+
+    th {
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 500;
+      color: #b0b0b0;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    td {
+      padding: 10px 12px;
+      font-size: 12px;
+      border-bottom: 1px solid #2a2a2a;
+      color: #d0d0d0;
+    }
+
+    tbody tr {
+      background-color: #141414;
+    }
+
+    tbody tr:hover {
+      background-color: #1f1f1f;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 24px 8px;
+      color: #6f6f6f;
+      font-size: 12px;
+      background-color: #141414;
+    }
+
+    .radio-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #666;
+      display: inline-block;
+      background-color: white;
+    }
+
+    .radio-indicator.selected {
+      border-color: #ff6600;
+      background-color: #ff6600;
+      box-shadow: inset 0 0 0 2px white;
+    }
+
+    .bottom-section {
+      height: 80%;
+      background-color: #202021;
+      overflow-y: auto;
+      overflow-x: hidden;
+      /* padding: 16px; */
+      padding-top: 0px;
+      /* padding-bottom: 50px; */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative; /* Add relative positioning for absolute overlay */
+    }
+
+    /* Betting Interface Styles */
+
+    .bet-panel {
+      background: #202021;
+      padding-bottom: 1rem;
+      width: 100%;
+      /* max-width: 380px; */
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* STATUS MESSAGE */
+    .status-box {
+      margin-bottom: 1rem;
+      /* padding: 0.5rem; */
+      border-radius: 8px;
+      border: 1px solid rgba(185, 28, 28, 0.5);
+      background-color: rgba(127, 29, 29, 0.3);
+      text-align: center;
+      color: #fca5a5;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .bet-options-block {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* BETTING OPTIONS */
+    .bet-options {
+      display: flex;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.1rem;
+      /* margin-bottom: 1rem; */
+    }
+
+    .bet-option {
+      border: 1px solid rgba(71, 71, 71, 0.7);
+      border-radius: 0.5rem;
+      height: 160px;
+      width: 170px;
+      padding: 0.75rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      background: radial-gradient(circle at center, #c5c4c4, #383838);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .bet-option:active:not(.disabled) {
+      transform: scale(0.97);
+    }
+
+    /* .bet-option-draw {
+        border: 2px solid rgba(55, 65, 81, 0.7);
+        border-radius: 0.5rem;
+        height: 160px;
+        width: 200px;
+        padding: 0.75rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        background: radial-gradient(circle at top, #1e1e1e, #0a0a0a);
+      } */
+
+    .bet-option.disabled {
+      cursor: not-allowed;
+      border-color: #4b5563;
+      opacity: 0.6;
+      background: radial-gradient(circle at center, #989898 0%, #2d2d2d 100%);
+    }
+
+    .bet-option.active-red {
+      border-color: #ef4444;
+      background: radial-gradient(circle at center, #5d1c0c 0%, #2e0a05 100%);
+      color: white;
+    }
+
+    .bet-option.active-blue {
+      border-color: #3b82f6;
+      background: radial-gradient(circle at center, #0b2258 0%, #040c2c 100%);
+      color: white;
+    }
+
+    .bet-option.active-green {
+      border-color: #22c55e;
+      background: radial-gradient(circle at center, #255b26 0%, #152a15 100%);
+      color: white;
+    }
+
+    .bet-option[data-bet="meron"]:not(.disabled) {
+      background: radial-gradient(circle at center, #5d1c0c 0%, #2e0a05 100%);
+      color: white;
+    }
+
+    .bet-option[data-bet="wala"]:not(.disabled) {
+      background: radial-gradient(circle at center, #0b2258 0%, #040c2c 100%);
+      color: white;
+    }
+
+    .bet-option[data-bet="draw"]:not(.disabled) {
+      background: radial-gradient(circle at center, #255b26 0%, #152a15 100%);
+      color: white;
+    }
+
+    .bet-option.active[data-bet="meron"] {
+      border-color: #ef4444;
+      color: white;
+    }
+
+    .bet-option.active[data-bet="wala"] {
+      border-color: #3b82f6;
+      color: white;
+    }
+
+    .bet-option.active[data-bet="draw"] {
+      border-color: #22c55e;
+      color: white;
+    }
+
+    .bet-option:hover:not(.disabled):not(.active-red):not(.active-green):not(.active-blue) {
+      border-color: #9ca3af;
+    }
+
+    /* Optional: hover brightness when open */
+    /* .bet-option:not(.disabled):hover {
+        filter: brightness(1.15);
+      } */
+
+    /* CHIPS SECTION */
+    .bet-controls {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      /* gap: 0.rem; */
+      /* bottom: 50px; */
+      margin-top: -25px; /* Overlap the bet-options-block */
+      margin-bottom: 10px;
+    }
+
+    .chicken {
+      width: 95px;
+      height: 50px;
+      display: block;
+      object-fit: fill;
+      flex-shrink: 0;
+    }
+
+    .chipDiv {
+      position: relative;
+      /* so the ::before stays inside */
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      gap: 0.6rem;
+      z-index: 0;
+      /* keeps chips above background */
+    }
+
+    /* .chipDiv {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, auto);
+        gap: 0.6rem;
+        z-index: 1;
+      } */
+
+    .chipDiv::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 55%;
+      left: 0;
+      border-radius: 1.2vh 1.2vh 0 0;
+      background-image: linear-gradient(180deg, #1a1a1a 0%, #333 100%);
+      transform: perspective(2vh) rotateX(4deg) translateY(-50%) scaleX(1.1);
+      box-shadow: inset 0 0 1vh rgba(0, 0, 0, 0.6);
+      z-index: 1;
+      /* behind the chips */
+    }
+
+    .chip-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      z-index: 2;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .chip-button:hover:not(.disabled) {
+      transform: scale(1.05);
+    }
+
+    .chip-button:active:not(.disabled) {
+      transform: scale(0.95);
+    }
+
+    .chip-button.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      filter: grayscale(1);
+    }
+
+    .chip-inner {
+      width: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+
+      /* z-index: 2; */
+    }
+
+    .chip-inner.glow {
+      box-shadow: 0px 0px 15px 1px #f7d383;
+    }
+
+    .chip-inner img {
+      width: 100%;
+      height: auto;
+      max-width: 72px;
+    }
+
+    .action-row-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ACTION BUTTONS */
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0 0.5rem;
+      position: relative;
+      /* bottom: 40px; */
+      margin-bottom: 0.6rem;
+    }
+
+    .betBtn,
+    .betBtnActive {
+      flex: 0 0 auto;
+      height: 28px;
+      width: 85px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      color: white;
+      box-shadow: 0px 3px 2px 4px rgba(0, 0, 0, 1);
+      background: linear-gradient(to bottom, #222222, #393939);
+      border: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .betBtn:active:not(.disabled),
+    .betBtnActive:active:not(.disabled) {
+      transform: translateY(2px);
+      box-shadow: 0px 1px 1px 2px rgba(0, 0, 0, 1);
+    }
+
+    #anyOddsBtn {
+      width: 130px;
+    }
+
+    .betBtnActive {
+      background: linear-gradient(to right, #b96614, #e08b28);
+      box-shadow: 0px 2px 2px 4px #b96614;
+    }
+
+    .betBtnActive:active {
+      transform: translateY(3px);
+      box-shadow: 0px 0px 0px 0px #b96614;
+    }
+
+    .betBtn.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      /* background: linear-gradient(135deg, #1f2937, #374151); */
+    }
+
+    .current-bet-box {
+      margin-top: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(234, 88, 12, 0.5);
+      background-color: rgba(154, 52, 18, 0.3);
+      color: #fdba74;
+      font-size: 0.9rem;
+    }
+
+    .current-bet-box span {
+      font-weight: bold;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+    }
+
+    .toast {
+      background: #1e293b;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      padding: 16px 24px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      animation: slideIn 0.3s ease-out;
+      min-width: 250px;
+    }
+
+    .toast.error {
+      background: #dc2626;
+      border-color: #991b1b;
+    }
+
+    .toast.success {
+      background: #059669;
+      border-color: #047857;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+
+    .toast.removing {
+      animation: slideOut 0.3s ease-in forwards;
+    }
+
+    /* Loading Container */
+    .loading-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .spin-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ========== RESPONSIVE DESIGN ========== */
+
+    /* Tablet adjustments */
+    @media screen and (max-width: 1024px) {
+      .left-sidebar {
+        width: 300px;
+      }
+
+      .main-container {
+        max-width: 100%;
+      }
+
+      .middle-section {
+        max-height: 15%;
+      }
+
+      .bottom-section {
+        min-height: 25%;
+        /* min-height: 100%; */
+      }
+    }
+
+    /* Mid-size screens - ensure proper layout */
+    @media screen and (max-width: 900px) {
+      .main-container {
+        flex-direction: column !important;
+        max-width: 100%;
+      }
+
+      .left-sidebar {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 2px solid #1f1f1f;
+      }
+
+      .right-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 60vh;
+      }
+    }
+
+    /* Mobile Portrait & Small Tablets */
+    @media screen and (max-width: 768px) {
+
+      /* Topbar adjustments */
+      .topbar {
+        height: auto;
+        min-height: 48px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+      }
+
+      .topbar-left {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .brand-logo {
+        height: 20px;
+        margin-right: 8px;
+      }
+
+      .maintenance {
+        font-size: 10px;
+        display: none;
+      }
+
+      .topbar-right {
+        gap: 10px;
+        font-size: 11px;
+      }
+
+      .user {
+        gap: 6px;
+      }
+
+      .user span:not(.avatar):not(.copy) {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .user .pill {
+        display: none;
+      }
+
+      .hamburger {
+        width: 20px;
+        height: 16px;
+      }
+
+      .lang {
+        padding: 6px 10px;
+      }
+
+      .lang span {
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      /* Main container stacks vertically */
+      .main-container {
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: calc(100vh - 48px);
+        max-width: 100%;
+      }
+
+      /* Left sidebar full width */
+      .left-sidebar {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 250px;
+        max-height: 45vh;
+        border-right: none;
+        border-bottom: 2px solid #1f1f1f;
+        flex-shrink: 0;
+      }
+
+      .sidebar-logo-container {
+        padding: 6px 10px;
+      }
+
+      .sidebar-logo {
+        height: 20px;
+      }
+
+      /* Sidebar buttons responsive */
+      .sidebar-top-buttons {
+        padding: 6px 10px;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .balance-button,
+      .amount-display {
+        font-size: 11px;
+        padding: 5px 10px;
+        height: 26px;
+      }
+
+      .sidebar-top-buttons .language-button {
+        font-size: 11px;
+        padding: 5px 10px;
+        height: 26px;
+        margin-left: auto;
+      }
+
+      /* Mode selector responsive */
+      .mode-selector {
+        padding: 6px 8px;
+        gap: 6px;
+      }
+
+      .reference-image {
+        height: 24px;
+      }
+
+      .info-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+      }
+
+      .mode-text {
+        font-size: 12px;
+      }
+
+      .mode-square {
+        width: 20px !important;
+        height: 20px;
+        min-width: 20px;
+        max-width: 20px;
+      }
+
+      .pause-icon-container {
+        width: 22px;
+        height: 22px;
+      }
+
+      /* Sidebar tabs responsive */
+      .tabs-container {
+        display: flex;
+      }
+
+      .tabs-container .tab {
+        font-size: 12px;
+        padding: 10px 8px;
+        font-weight: 600;
+        min-height: 40px;
+      }
+
+      /* Table responsive */
+      .table-container {
+        font-size: 11px;
+      }
+
+      th,
+      td {
+        padding: 8px 6px;
+        font-size: 11px;
+      }
+
+      /* Right content area */
+      .right-content {
+        width: 100% !important;
+        min-height: 55vh;
+        max-width: 100% !important;
+        flex: 1 1 auto;
+      }
+
+      .right-header {
+        padding: 8px 12px;
+        height: auto;
+        min-height: 40px;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .right-header .balance-button {
+        font-size: 12px;
+        padding: 6px 12px;
+        height: 32px;
+        flex-shrink: 0;
+        font-weight: 600;
+      }
+
+      .right-header .amount-display {
+        font-size: 13px;
+        padding: 6px 12px;
+        height: 32px;
+        min-width: 80px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .right-header .language-button {
+        font-size: 11px !important;
+        padding: 6px 12px !important;
+        height: 32px !important;
+        min-width: 100px !important;
+        border: 1px solid #fe7902 !important;
+        font-weight: 600 !important;
+        flex-shrink: 0;
+      }
+
+      /* Content sections responsive */
+      .top-section {
+        height: 30vh;
+        min-height: 200px;
+        max-height: 35vh;
+      }
+
+      .middle-section {
+        height: 12vh;
+        min-height: 70px;
+        max-height: 15vh;
+      }
+
+      .bottom-section {
+        height: auto;
+        /* min-height: 400px; */
+        min-height: 100%;
+        padding: 10px;
+        overflow-y: auto;
+        flex: 1;
+      }
+
+      /* Betting panel responsive */
+      .bet-panel {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+        padding-bottom: 20px;
+      }
+
+      /* Status box */
+      .status-box {
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        padding: 8px;
+      }
+
+      /* Betting options responsive */
+      .bet-options {
+        gap: 10px;
+        margin-bottom: 0.5rem;
+        justify-content: center;
+      }
+
+      .bet-option {
+        height: 150px;
+        width: 115px;
+        padding: 0.6rem;
+        gap: 0.5rem;
+        font-weight: 600;
+      }
+
+      .bet-option .odds {
+        font-size: 1.1em !important;
+        margin-bottom: 25px !important;
+        font-weight: 700;
+      }
+
+      .bet-option .label {
+        font-size: 1.1em !important;
+        font-weight: 700;
+      }
+
+      .bet-option[data-bet="draw"] {
+        width: 105px !important;
+        height: 130px !important;
+      }
+
+      /* Bet controls responsive */
+      .bet-controls {
+        bottom: 30px;
+        gap: 0.3rem;
+        margin-top: -15px; /* Maintain overlap on tablet */
+      }
+
+      .chicken {
+        width: 60px;
+        height: 35px;
+      }
+
+      .chipDiv {
+        grid-template-columns: repeat(5, auto);
+        gap: 0.3rem;
+      }
+
+      .chip-button {
+        padding: 2px;
+      }
+
+      .chip-inner {
+        width: 36px;
+      }
+
+      .chip-inner img {
+        max-width: 36px;
+      }
+
+      /* Action buttons responsive */
+      .action-row {
+        gap: 0.4rem;
+        padding: 0 0.3rem;
+        bottom: 20px;
+      }
+
+      .betBtn,
+      .betBtnActive {
+        height: 24px;
+        width: 70px;
+        font-size: 0.65rem;
+        border-radius: 8px;
+      }
+
+      #anyOddsBtn {
+        width: 100px;
+      }
+
+      #placeBetBtn {
+        width: 100px !important;
+      }
+
+      /* Current bet box responsive */
+      .current-bet-box {
+        margin-top: 0.5rem;
+        padding: 8px;
+        font-size: 0.8rem;
+      }
+
+      /* Tabbar responsive */
+      .tabbar {
+        --bar-h: 40px;
+        --tab-w: 95px;
+        padding: 2px 3px;
+      }
+
+      .tabbar .tab {
+        padding: 0 20px;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .tabbar .tab>span {
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .tabbar::before {
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        height: 8px;
+      }
+
+      /* Language dropdown responsive */
+      .lang-menu {
+        min-width: 150px;
+      }
+
+      .lang-item {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+    }
+
+    /* Mid-range Mobile Devices (481px - 600px) */
+    @media screen and (min-width: 481px) and (max-width: 600px) {
+      .right-header .balance-button {
+        font-size: 13px;
+        padding: 7px 14px;
+        height: 34px;
+      }
+
+      .right-header .amount-display {
+        font-size: 14px;
+        padding: 7px 14px;
+        height: 34px;
+        min-width: 90px;
+      }
+
+      .right-header .language-button {
+        font-size: 12px !important;
+        padding: 7px 14px !important;
+        height: 34px !important;
+        min-width: 110px !important;
+      }
+
+      .bet-option {
+        height: 155px;
+        width: 120px;
+      }
+
+      .bet-option[data-bet="draw"] {
+        width: 110px !important;
+        height: 135px !important;
+      }
+    }
+
+    /* Small Mobile Devices */
+    @media screen and (max-width: 480px) {
+      .topbar {
+        padding: 6px 8px;
+      }
+
+      .topbar-right {
+        font-size: 10px;
+        gap: 6px;
+      }
+
+      .brand-logo {
+        height: 18px;
+      }
+
+      .user span:not(.avatar) {
+        font-size: 10px;
+      }
+
+      .balance-button,
+      .amount-display {
+        font-size: 10px;
+        padding: 4px 8px;
+        height: 24px;
+      }
+
+      .right-header .balance-button {
+        font-size: 11px;
+        padding: 5px 10px;
+        height: 30px;
+      }
+
+      .right-header .amount-display {
+        font-size: 12px;
+        padding: 5px 10px;
+        height: 30px;
+        min-width: 70px;
+      }
+
+      .right-header .language-button {
+        font-size: 10px !important;
+        padding: 5px 10px !important;
+        height: 30px !important;
+        min-width: 90px !important;
+      }
+
+      .mode-selector {
+        padding: 4px 6px;
+        gap: 4px;
+      }
+
+      .reference-image {
+        height: 20px;
+      }
+
+      th,
+      td {
+        padding: 6px 4px;
+        font-size: 10px;
+      }
+
+      /* Extra small betting panel adjustments */
+      .bet-option {
+        height: 120px;
+        width: 90px;
+        padding: 0.4rem;
+      }
+
+      .bet-option[data-bet="draw"] {
+        width: 80px !important;
+        height: 100px !important;
+      }
+
+      .bet-option .odds {
+        font-size: 0.9em !important;
+        margin-bottom: 15px !important;
+      }
+
+      .bet-option .label {
+        font-size: 0.9em !important;
+      }
+
+      .chip-inner {
+        width: 32px;
+      }
+
+      .chip-inner img {
+        max-width: 32px;
+      }
+
+      .chicken {
+        width: 50px;
+        height: 30px;
+      }
+
+      .betBtn,
+      .betBtnActive {
+        height: 22px;
+        width: 60px;
+        font-size: 0.6rem;
+      }
+
+      #anyOddsBtn {
+        width: 85px;
+      }
+
+      #placeBetBtn {
+        width: 85px !important;
+      }
+
+      .tabbar {
+        --bar-h: 32px;
+        --tab-w: 75px;
+      }
+
+      .tabbar .tab {
+        padding: 0 12px;
+        font-size: 11px;
+      }
+    }
+
+    /* Landscape mode for mobile */
+    @media screen and (max-width: 896px) and (orientation: landscape) {
+      .main-container {
+        flex-direction: row;
+        height: calc(100vh - 48px);
+      }
+
+      .left-sidebar {
+        width: 40%;
+        min-width: 280px;
+        max-width: 360px;
+        max-height: 100%;
+        border-right: 2px solid #1f1f1f;
+        border-bottom: none;
+      }
+
+      .right-content {
+        width: 60%;
+        min-height: auto;
+      }
+
+      .top-section {
+        height: 30%;
+        min-height: 120px;
+      }
+
+      .middle-section {
+        height: 25%;
+        min-height: 80px;
+      }
+
+      .bottom-section {
+        /* height: 45%; */
+        height: 100%;
+        min-height: 200px;
+        overflow-y: auto;
+      }
+
+      .topbar {
+        flex-wrap: nowrap;
+      }
+
+      .maintenance {
+        display: block;
+        font-size: 10px;
+      }
+
+      /* Landscape betting adjustments */
+      .bet-panel {
+        padding: 8px;
+        max-width: 100%;
+      }
+
+      .bet-option {
+        height: 100px;
+        width: 90px;
+        padding: 0.4rem;
+      }
+
+      .bet-option[data-bet="draw"] {
+        width: 80px !important;
+        height: 90px !important;
+      }
+
+      .bet-controls {
+        bottom: 20px;
+        margin-top: -10px; /* Maintain overlap on mobile */
+      }
+
+      .action-row {
+        bottom: 10px;
+      }
+
+      .chip-inner {
+        width: 32px;
+      }
+
+      .chip-inner img {
+        max-width: 32px;
+      }
+    }
+
+    /* iPad and larger tablets */
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      .topbar {
+        height: 48px;
+      }
+
+      .main-container {
+        flex-direction: row;
+      }
+
+      .left-sidebar {
+        width: 320px;
+      }
+
+      .top-section {
+        height: 40%;
+      }
+
+      .middle-section {
+        height: 35%;
+      }
+
+      .bottom-section {
+        /* height: 25%; */
+        height: 100%;
+      }
+    }
+
+    /* Large desktop screens */
+    @media screen and (min-width: 1281px) {
+      .main-container {
+        max-width: 1600px;
+      }
+
+      .left-sidebar {
+        width: 400px;
+      }
+    }
+
+    /* Touch device improvements */
+    @media (hover: none) and (pointer: coarse) {
+
+      .tabs-container .tab,
+      .tabbar .tab,
+      .balance-button,
+      .language-button,
+      .lang-item,
+      .pause-icon,
+      .hamburger {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+      }
+
+      .tabs-container .tab,
+      .tabbar .tab {
+        min-height: 40px;
+      }
+
+      button,
+      a {
+        touch-action: manipulation;
+      }
+    }
+
+    /* High DPI screens */
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .live-image,
+      .brand-logo,
+      .sidebar-logo,
+      .reference-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+      }
+    }
+
+    /* Safe area insets for notched devices */
+    @supports (padding: max(0px)) {
+      .topbar {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+      }
+
+      body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+    }
+
+    /* Prevent text selection on UI elements */
+    .tabs-container .tab,
+    .tabbar .tab,
+    .balance-button,
+    .language-button,
+    .mode-selector,
+    .topbar,
+    .hamburger,
+    .lang {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    /* Smooth scrolling */
+    .table-container {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    /* Loading optimization for images */
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .live-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Device-specific styles */
+    .ios-device .topbar {
+      padding-top: env(safe-area-inset-top, 8px);
+    }
+
+    .mobile-device .table-container {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Viewport-based heights for better mobile support */
+    @media screen and (max-width: 896px) and (orientation: landscape) {
+      .main-container {
+        height: calc(var(--vh, 1vh) * 100 - 48px);
+      }
+    }
+
+    @media screen and (max-width: 768px) and (orientation: portrait) {
+      .main-container {
+        min-height: calc(var(--vh, 1vh) * 100 - 48px);
+      }
+    }
+
+    /* Additional cross-device compatibility */
+    @media screen and (max-width: 768px) {
+
+      /* Force vertical layout */
+      html,
+      body {
+        width: 100%;
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
+
+      .main-container {
+        flex-direction: column !important;
+        width: 100% !important;
+      }
+
+      .left-sidebar,
+      .right-content {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Ensure all images are responsive */
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* Better tap targets for mobile */
+      button,
+      .chip-button,
+      .bet-option {
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+      }
+
+      /* Prevent text resize in landscape */
+      html {
+        -webkit-text-size-adjust: 100%;
+        -moz-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      /* Smooth transitions on mobile */
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Better scrolling */
+      .bottom-section,
+      .table-container,
+      .left-sidebar {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+      }
+
+      /* Fix for iOS Safari bottom bar */
+      .main-container {
+        min-height: -webkit-fill-available;
+        min-height: fill-available;
+      }
+    }
+
+    /* Very wide screens (ultra-wide monitors) */
+    @media screen and (min-width: 1920px) {
+      .main-container {
+        max-width: 1800px;
+      }
+
+      .bet-panel {
+        max-width: 450px;
+      }
+    }
+
+    /* Tablet specific optimizations */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+      .bet-panel {
+        /* max-width: 420px; */
+      }
+
+      .bet-option {
+        height: 160px;
+        width: 130px;
+      }
+
+      .bet-option[data-bet="draw"] {
+        width: 120px !important;
+        height: 140px !important;
+      }
+
+      .chip-inner {
+        width: 42px;
+      }
+
+      .chip-inner img {
+        max-width: 42px;
+      }
+    }
+
+    /* iPhone SE and similar small phones */
+    @media screen and (max-width: 375px) {
+      .right-header .balance-button {
+        font-size: 10px;
+        padding: 5px 8px;
+        height: 28px;
+      }
+
+      .right-header .amount-display {
+        font-size: 11px;
+        padding: 5px 8px;
+        height: 28px;
+        min-width: 65px;
+      }
+
+      .right-header .language-button {
+        font-size: 9px !important;
+        padding: 5px 8px !important;
+        height: 28px !important;
+        min-width: 80px !important;
+      }
+
+      .bet-option {
+        height: 120px;
+        width: 85px;
+        padding: 0.4rem;
+      }
+
+      .bet-option[data-bet="draw"] {
+        width: 75px !important;
+        height: 105px !important;
+      }
+
+      .bet-option .odds {
+        font-size: 0.95em !important;
+        margin-bottom: 15px !important;
+      }
+
+      .bet-option .label {
+        font-size: 0.95em !important;
+      }
+
+      .chip-inner {
+        width: 30px;
+      }
+
+      .chip-inner img {
+        max-width: 30px;
+      }
+
+      .chipDiv {
+        gap: 0.25rem;
+      }
+
+      .betBtn,
+      .betBtnActive {
+        height: 22px;
+        width: 58px;
+        font-size: 0.58rem;
+      }
+
+      #anyOddsBtn {
+        width: 80px;
+      }
+
+      #placeBetBtn {
+        width: 80px !important;
+      }
+
+      .chicken {
+        width: 48px;
+        height: 30px;
+      }
+
+      .tabs-container .tab {
+        font-size: 11px;
+        padding: 8px 6px;
+      }
+
+      .tabbar {
+        --bar-h: 36px;
+        --tab-w: 80px;
+      }
+
+      .tabbar .tab {
+        padding: 0 15px;
+        font-size: 12px;
+      }
+
+      .tabbar .tab>span {
+        font-size: 12px;
+      }
+    }
+
+    /* Android Chrome specific fixes */
+    @supports (-webkit-appearance: none) {
+
+      button,
+      input,
+      select {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+    }
+
+    /* Print styles */
+    @media print {
+
+      .topbar,
+      .hamburger-menu,
+      .lang-menu,
+      .language-dropdown,
+      .mode-square-menu,
+      .pause-menu {
+        display: none !important;
+      }
+    }
+
+    /* Baccarat Board Styles */
+    :root {
+      --baccarat-cell: 20px;
+      /* smaller size for integration */
+      --baccarat-line: 1px;
+      /* grid line thickness */
+      --baccarat-grid: #e8e8e8;
+      /* grid line color */
+      --baccarat-bg: #ffffff;
+      --baccarat-rail: #1e1e1e;
+      --baccarat-red: #e85050;
+      --baccarat-blue: #2a73ff;
+      --baccarat-green: #21a34a;
+    }
+
+    .baccarat-board-wrap {
+      margin: 0 4px;
+      padding: 4px;
+      /* background: #000; */
+      /* border-radius: 8px; */
+      /* box-shadow: 0 2px 8px rgba(0,0,0,.3); */
+    }
+
+    .baccarat-board-container {
+      /* background: #fff; */
+      /* border-radius: 6px; */
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .2) inset;
+      overflow: hidden;
+      display: flex;
+      align-items: stretch;
+      max-width: 100%;
+    }
+
+    /* Left rail (legend) */
+    .baccarat-rail {
+      width: 50px;
+      /* background: var(--baccarat-rail); */
+      background: #202021;
+      color: #fff;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .baccarat-rail .pill {
+      background: #d73a3a;
+      border-radius: 999px;
+      padding: 1px 7px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      font-size: 15px;
+    }
+
+    .baccarat-rail .counts {
+      width: 100%;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      line-height: 1.2;
+    }
+
+    .baccarat-rail .counts .row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 4px 0;
+    }
+
+    .baccarat-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      background: transparent;
+      flex-shrink: 0;
+    }
+
+    .baccarat-dot.red {
+      color: var(--baccarat-red);
+      background-color: red;
+    }
+
+    .baccarat-dot.blue {
+      color: var(--baccarat-blue);
+      background-color: blue;
+    }
+
+    .baccarat-dot.green {
+      color: var(--baccarat-green);
+      background-color: var(--baccarat-green);
+    }
+
+    .baccarat-scroller {
+      position: relative;
+      overflow-x: auto;
+      overflow-y: hidden;
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+      /* background: #fff; */
+      border-radius: 5px;
+      max-height: 120px;
+      /* Limit height to fit in bottom section */
+    }
+
+    .baccarat-grid {
+      position: relative;
+      display: grid;
+      grid-template-rows: repeat(6, var(--baccarat-cell));
+      grid-auto-columns: var(--baccarat-cell);
+      gap: 0;
+      padding-bottom: 6px;
+      width: fit-content;
+      min-width: 100%;
+      background:
+        repeating-linear-gradient(to right,
+          var(--baccarat-grid) 0, var(--baccarat-grid) var(--baccarat-line),
+          transparent var(--baccarat-line), transparent calc(var(--baccarat-cell))),
+        repeating-linear-gradient(to bottom,
+          var(--baccarat-grid) 0, var(--baccarat-grid) var(--baccarat-line),
+          transparent var(--baccarat-line), transparent calc(var(--baccarat-cell))),
+        var(--baccarat-bg);
+    }
+
+    /* Circle (hollow) */
+    .baccarat-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--baccarat-cell);
+      height: var(--baccarat-cell);
+    }
+
+    .baccarat-disc {
+      width: calc(var(--baccarat-cell) - 6px);
+      height: calc(var(--baccarat-cell) - 6px);
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid #000;
+    }
+
+    .baccarat-disc.red {
+      border-color: var(--baccarat-red);
+    }
+
+    .baccarat-disc.blue {
+      border-color: var(--baccarat-blue);
+    }
+
+    .baccarat-disc.green {
+      border-color: var(--baccarat-green);
+    }
+
+    /* Optional tiny tie mark */
+    .baccarat-disc.tie::after {
+      content: "⟲";
+      font-size: 10px;
+      display: block;
+      transform: translateY(-1px);
+      opacity: .6;
+    }
+
+    /* Slim scrollbar */
+    .baccarat-scroller::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .baccarat-scroller::-webkit-scrollbar-track {
+      background: #d9d9d9;
+      border-radius: 999px;
+    }
+
+    .baccarat-scroller::-webkit-scrollbar-thumb {
+      background: #6b6b6b;
+      border-radius: 999px;
+    }
+
+    .baccarat-scroller::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* Settings Menu Overlay Styles */
+    .settings-menu-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .settings-menu-content {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      width: 90%;
+      max-width: 450px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+      position: relative;
+    }
+
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #333;
+    }
+
+    .settings-header h3 {
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .settings-close-btn {
+      background: rgba(0, 0, 0, 0.95);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .settings-close-btn:hover {
+      background: #ff6666;
+      transform: scale(1.05);
+    }
+
+    .settings-chips-grid {
+      margin-bottom: 20px;
+    }
+
+    .settings-chip-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .settings-chip-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .settings-chip-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .settings-chip-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .settings-chip-inner {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .settings-chip-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .settings-chip-label {
+      color: #fff;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .custom_chip{
+      width:20px; 
+      height:20px;
+      background-color: black;
+    }
+
+    .settings-custom-section {
+      display:flex;
+      gap:2px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+
+    }
+
+    .settings-custom-section h4 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .settings-input-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .settings-custom-input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .settings-custom-input:focus {
+      outline: none;
+      border-color: #ff8c00;
+      box-shadow: 0 0 6px rgba(255, 140, 0, 0.2);
+    }
+
+    .settings-custom-input::placeholder {
+      color: #666;
+    }
+
+    .settings-custom-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #ff8c00 0%, #ff6600 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .settings-custom-btn:hover {
+      background: linear-gradient(135deg, #ff9900 0%, #ff7700 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+    }
+
+    .settings-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .settings-action-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #333 0%, #555 100%);
+      color: white;
+      border: 1px solid #666;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      max-width: 160px;
+    }
+
+    .settings-action-btn:hover {
+      background: linear-gradient(135deg, #444 0%, #666 100%);
+      border-color: #888;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Design for Settings Menu */
+    @media screen and (max-width: 768px) {
+      .settings-menu-content {
+        width: 95%;
+        padding: 18px;
+        max-height: 85vh;
+      }
+
+      .settings-header h3 {
+        font-size: 16px;
+      }
+
+      .settings-chip-row {
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .settings-chip-inner {
+        width: 40px;
+        height: 40px;
+      }
+
+      .settings-chip-label {
+        font-size: 10px;
+      }
+
+      .settings-input-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .settings-custom-input {
+        width: 100%;
+      }
+
+      .settings-actions {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .settings-action-btn {
+        max-width: none;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .settings-chip-row {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .settings-chip-btn {
+        padding: 8px;
+      }
+
+      .settings-chip-inner {
+        width: 35px;
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading Container -->
+  <div class="loading-container" id="loadingContainer">
+    <div>Loading...</div>
+  </div>
+
+  <!-- Global Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="assets/logo.png" alt="DAMA Logo" class="brand-logo" />
+      <div class="maintenance">
+        regular maintenance at 10-13-2025 08:40–09:10 (GMT+8)
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="user">
+        <span class="avatar"></span>
+        <span id="usernameDisplay">svhz571754</span>
+        <span class="pill">ID: ph13010141p</span>
+        <span class="copy" title="Copy ID"></span>
+      </div>
+      <div class="lang" id="langToggle" aria-haspopup="true" aria-expanded="false" onclick="toggleTopLangMenu(event)">
+        <span class="globe">🌐</span>
+        <span id="langLabel">ENGLISH</span>
+        <span class="caret">▾</span>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <div class="lang-item selected" data-lang="English" role="menuitem"
+            onclick="selectTopLang(event, 'English'); closeLangMenu();">
+            <span class="check">✔</span><span>English</span>
+          </div>
+          <div class="lang-item" data-lang="中文" role="menuitem" onclick="selectTopLang(event, '中文'); closeLangMenu();">
+            <span class="check">✔</span><span>中文</span>
+          </div>
+          <div class="lang-item" data-lang="Tiếng Việt" role="menuitem"
+            onclick="selectTopLang(event, 'Tiếng Việt'); closeLangMenu();">
+            <span class="check">✔</span><span>Tiếng Việt</span>
+          </div>
+          <div class="lang-item" data-lang="Indonesia" role="menuitem"
+            onclick="selectTopLang(event, 'Indonesia'); closeLangMenu();">
+            <span class="check">✔</span><span>Indonesia</span>
+          </div>
+        </div>
+      </div>
+      <div class="hamburger-container">
+        <div class="hamburger" aria-label="Menu" id="hamburgerButton" onclick="toggleHamburgerMenu(event)">
+          <span></span>
+        </div>
+        <div class="hamburger-menu" id="hamburgerMenu" role="menu">
+          <button class="hamburger-menu-item" role="menuitem" onclick="navigateTo('transaction')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Transaction Report
+          </button>
+          <button class="hamburger-menu-item" role="menuitem" onclick="navigateTo('myinfo')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            My Info
+          </button>
+          <button class="hamburger-menu-item" role="menuitem" onclick="navigateTo('statement')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Statement
+          </button>
+          <button class="hamburger-menu-item" role="menuitem" onclick="navigateTo('outstanding')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Outstanding
+          </button>
+          <button class="hamburger-menu-item" role="menuitem" onclick="navigateTo('download')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download APP
+          </button>
+          <button class="hamburger-menu-item" role="menuitem" onclick="handleLogout()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            LOGOUT
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Left Sidebar -->
+    <div class="left-sidebar">
+      <!-- Logo at top of sidebar -->
+      <div class="sidebar-logo-container">
+        <img src="assets/logo.png" alt="DAGA Logo" class="sidebar-logo" />
+      </div>
+
+      <!-- Mode Selector Component -->
+      <div class="mode-selector">
+        <div class="left-header mode-square-container" id="modeSquareButton" onclick="toggleModeSquareMenu(event)">
+          <img src="assets/reference.png" alt="Reference" class="reference-image" />
+          <div class="mode-square-menu" id="modeSquareMenu" role="menu">
+            <button class="mode-square-menu-item" role="menuitem" onclick="showInfoPage('match-history')">
+              Match History
+            </button>
+            <button class="mode-square-menu-item" role="menuitem" onclick="showInfoPage('schedule')">
+              Schedule
+            </button>
+            <button class="mode-square-menu-item" role="menuitem" onclick="showInfoPage('guide')">
+              Guide
+            </button>
+            <button class="mode-square-menu-item" role="menuitem" onclick="showInfoPage('terms')">
+              Terms & Conditions
+            </button>
+          </div>
+        </div>
+        <span class="mode-text">Mode</span>
+        <div class="mode-square"></div>
+        <div class="pause-icon-container">
+          <svg width="35" height="25" viewBox="0 0 28 20" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="8" height="16" rx="2" ry="2" fill="none" stroke="#fe7602" stroke-width="1" />
+            <rect x="14" y="2" width="8" height="16" rx="2" ry="2" fill="none" stroke="#fe7602" stroke-width="1" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Tabs in sidebar -->
+      <div class="tabs-container">
+        <button class="tab active" onclick="switchTab('current', event)">
+          Current Bets
+        </button>
+        <button class="tab" onclick="switchTab('report', event)">
+          Today Report
+        </button>
+      </div>
+
+      <!-- Today Total Section -->
+      <div class="today-total-section" id="todayTotalSection" style="display: none" onclick="fetchHistory()">
+        <div class="today-total-header">
+          <span class="refresh-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- clockwise refresh with reduced gap and pointed arrowheads -->
+              <path d="M20 8a8 8 0 0 0-12.5-3.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M5 4 L10 4 L8 9 Z" fill="currentColor" />
+              <path d="M4 16a8 8 0 0 0 12.5 3.5" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M19 20 L14 20 L16 15 Z" fill="currentColor" />
+            </svg>
+          </span>
+          <span>Today Total</span>
+        </div>
+      </div>
+
+      <!-- Current Bets Content -->
+      <div class="table-container" id="currentBetsContent">
+        <div class="empty-state">No current bets</div>
+      </div>
+
+      <!-- Report Table -->
+      <div class="table-container" id="todayReportTable" style="display: none">
+        <table>
+          <thead>
+            <tr>
+              <th>Arena</th>
+              <th>Bet(Odd)</th>
+              <th>$</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="reportTableBody">
+            <tr>
+              <td colspan="4" class="empty-state">No reports</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right Content Area -->
+    <div class="right-content">
+      <!-- Header buttons similar to the image -->
+      <div class="right-header">
+        <button class="balance-button" onclick="fetchPlayerInfo()">
+          Balance
+        </button>
+        <div class="amount-display" id="balanceAmount">$0.00</div>
+        <div class="language-dropdown-container" id="languageDropdown">
+          <button class="language-button" id="languageButton" aria-haspopup="true" aria-expanded="false"
+            onclick="toggleLanguageMenu(event)">
+            <span id="selectedLanguage">ENGLISH</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="language-dropdown" id="languageMenu" role="menu">
+            <button class="language-item selected" data-label="ENGLISH" role="menuitem" onclick="selectLanguage(this)">
+              English
+            </button>
+            <button class="language-item" data-label="中文" role="menuitem" onclick="selectLanguage(this)">
+              中文
+            </button>
+            <button class="language-item" data-label="TIẾNG VIỆT" role="menuitem" onclick="selectLanguage(this)">
+              Tiếng Việt
+            </button>
+            <button class="language-item" data-label="日本語" role="menuitem" onclick="selectLanguage(this)">
+              日本語
+            </button>
+            <button class="language-item" data-label="ไทย" role="menuitem" onclick="selectLanguage(this)">
+              ไทย
+            </button>
+            <button class="language-item" data-label="ESPAÑOL" role="menuitem" onclick="selectLanguage(this)">
+              ESPAÑOL
+            </button>
+            <button class="language-item" data-label="MALAY" role="menuitem" onclick="selectLanguage(this)">
+              Malay
+            </button>
+            <button class="language-item" data-label="INDONESIA" role="menuitem" onclick="selectLanguage(this)">
+              Indonesia
+            </button>
+            <button class="language-item" data-label="KHMER" role="menuitem" onclick="selectLanguage(this)">
+              Khmer
+            </button>
+            <button class="language-item" data-label="KOREAN" role="menuitem" onclick="selectLanguage(this)">
+              Korean
+            </button>
+            <button class="language-item" data-label="PORTUGUÊS" role="menuitem" onclick="selectLanguage(this)">
+              Português
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- large blank live area by design -->
+      <div class="top-section">
+        <!-- Top section content (35%) -->
+      </div>
+      <div class="middle-section">
+        <!-- Tabbar -->
+        <div class="tabbar">
+          <button class="tab tab--active"><span>CF01</span></button>
+          <button class="tab"><span>–</span></button>
+          <button class="tab"><span>–</span></button>
+          <button class="tab"><span>–</span></button>
+          <!-- <button class="tab"><span>–</span></button> -->
+
+          <!-- New: fills the remaining space to the rounded right edge -->
+          <div class="endcap"></div>
+        </div>
+        <!-- Middle section content (15%) -->
+      </div>
+
+      <div class="bottom-section">
+        <!-- Bottom section content (45%) -->
+        <div class="bet-panel">
+          <!-- Status -->
+          <div id="statusBox" class="status-box" style="display: none"></div>
+
+          <!-- Betting Options -->
+          <div class="bet-options-block">
+            <div class="bet-options">
+              <div class="bet-option" data-bet="meron" onclick="handleBetSelect('main', 'meron')">
+                <div class="odds" id="meronOdds" style="margin-bottom: 40px; font-size: 1.2em">
+                  0.00
+                </div>
+                <div class="label" style="font-size: 1.2em">Meron</div>
+              </div>
+              <div class="bet-option" data-bet="draw" style="width: 140px; height: 145px"
+                onclick="handleBetSelect('main', 'draw')">
+                <div class="odds" id="drawOdds" style="margin-bottom: 40px; font-size: 1.2em">
+                  0.00
+                </div>
+                <div class="label" style="font-size: 1.2em">Draw</div>
+              </div>
+              <div class="bet-option" data-bet="wala" onclick="handleBetSelect('main', 'wala')">
+                <div class="odds" id="walaOdds" style="margin-bottom: 40px; font-size: 1.2em">
+                  0.00
+                </div>
+                <div class="label" style="font-size: 1.2em">Wala</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bet Controls -->
+          <div class="bet-controls">
+            <img src="assets/chicken2.png" alt="chicken2" class="chicken" />
+            <div class="chipDiv">
+              <button class="chip-button" data-amount="5" onclick="handleBetAmount('main', 5)">
+                <div class="chip-inner">
+                  <img src="assets/5.png" alt="chip5" />
+                </div>
+              </button>
+              <button class="chip-button" data-amount="10" onclick="handleBetAmount('main', 10)">
+                <div class="chip-inner">
+                  <img src="assets/10.png" alt="chip10" />
+                </div>
+              </button>
+              <button class="chip-button" data-amount="25" onclick="handleBetAmount('main', 25)">
+                <div class="chip-inner">
+                  <img src="assets/25.png" alt="chip25" />
+                </div>
+              </button>
+              <button class="chip-button" data-amount="50" onclick="handleBetAmount('main', 50)">
+                <div class="chip-inner">
+                  <img src="assets/50.png" alt="chip50" />
+                </div>
+              </button>
+              <button class="chip-button" data-amount="100" onclick="handleBetAmount('main', 100)">
+                <div class="chip-inner">
+                  <img src="assets/max.png" alt="chip100" />
+                </div>
+              </button>
+            </div>
+            <img src="assets/chicken1.png" alt="chicken1" class="chicken" />
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-row-container">
+            <div class="action-row">
+              <button class="betBtn" id="settingsBtn" onclick="toggleSettingsMenu()">⚙️</button>
+              <button class="betBtn" id="anyOddsBtn" onclick="toggleAnyOdds('main')">
+                Any Odds
+              </button>
+              <button class="betBtn" id="placeBetBtn" style="width: 130px" onclick="placeBet('main')">
+                &#10003;
+              </button>
+              <button class="betBtn" id="clearBtn" onclick="clearBet('main')">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Baccarat_Board -->
+          <div class="baccarat-board-wrap">
+            <div class="baccarat-board-container">
+              <aside class="baccarat-rail">
+                <div class="pill">B</div>
+                <div class="counts">
+                  <div class="row"><span class="baccarat-dot red"></span><span id="baccaratRedCount">0</span></div>
+                  <div class="row"><span class="baccarat-dot green"></span><span id="baccaratGreenCount">0</span></div>
+                  <div class="row"><span class="baccarat-dot blue"></span><span id="baccaratBlueCount">0</span></div>
+                </div>
+              </aside>
+
+              <div class="baccarat-scroller">
+                <div id="baccaratGrid" class="baccarat-grid" aria-label="result grid"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current Bet Display -->
+          <div id="currentBetBox" class="current-bet-box" style="display: none">
+            Current Bet: <span id="betName">—</span> -
+            <span id="betValue">$0</span>
+            <span id="anyOddsTag" style="display: none; color: #4ade80">
+              (Any Odds)
+            </span>
+          </div>
+        </div>
+
+        <!-- Settings Menu Overlay -->
+        <div id="settingsMenu" class="settings-menu-overlay" style="display: none;">
+          <div class="settings-menu-content">
+            <!-- Header -->
+            <div class="settings-header">
+              <h3>Select Chips</h3>
+              <button class="settings-close-btn" onclick="toggleSettingsMenu()">×</button>
+            </div>
+            
+                        <!-- Custom Amount Input -->
+            <div class="settings-custom-section">
+              <div class="custom_chip"></div>
+              <div class="settings-input-group">
+                <input type="number" id="customAmount" class="settings-custom-input" placeholder="Create Your Chips" min="1" max="9999">
+                <!-- <button class="settings-custom-btn" onclick="handleCustomAmount()">Apply</button> -->
+                 <p>Maximum <br/> php 5,000</p>
+              </div>
+            </div>
+            
+
+            <!-- Chip Selection Grid -->
+            <div class="settings-chips-grid">
+              <div class="settings-chip-row">
+                <button class="settings-chip-btn" data-amount="5" onclick="handleBetAmount('settings', 5)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/5.png" alt="chip5" />
+                  </div>
+                  <span class="settings-chip-label">5</span>
+                </button>
+                <button class="settings-chip-btn" data-amount="10" onclick="handleBetAmount('settings', 10)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/10.png" alt="chip10" />
+                  </div>
+                  <span class="settings-chip-label">10</span>
+                </button>
+                <button class="settings-chip-btn" data-amount="25" onclick="handleBetAmount('settings', 25)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/25.png" alt="chip25" />
+                  </div>
+                  <span class="settings-chip-label">25</span>
+                </button>
+                <button class="settings-chip-btn" data-amount="50" onclick="handleBetAmount('settings', 50)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/50.png" alt="chip50" />
+                  </div>
+                  <span class="settings-chip-label">50</span>
+                </button>
+              </div>
+              
+              <div class="settings-chip-row">
+                <button class="settings-chip-btn" data-amount="100" onclick="handleBetAmount('settings', 100)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/100.png" alt="chip100" />
+                  </div>
+                  <span class="settings-chip-label">100</span>
+                </button>
+                <button class="settings-chip-btn" data-amount="250" onclick="handleBetAmount('settings', 250)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/250.png" alt="chip250" />
+                  </div>
+                  <span class="settings-chip-label">250</span>
+                </button>
+                <button class="settings-chip-btn" data-amount="500" onclick="handleBetAmount('settings', 500)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/500.png" alt="chip500" />
+                  </div>
+                  <span class="settings-chip-label">500</span>
+                </button>
+                <button class="settings-chip-btn" data-amount="1000" onclick="handleBetAmount('settings', 1000)">
+                  <div class="settings-chip-inner">
+                    <img src="assets/1000.png" alt="chip1000" />
+                  </div>
+                  <span class="settings-chip-label">1000</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="settings-actions">
+              <button class="settings-action-btn" onclick="clearAllBets()">Clear All</button>
+              <button class="settings-action-btn" onclick="setMaxBet()">Max Bet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========== RESPONSIVE VIEWPORT HEIGHT FIX ==========
+    // Fix for mobile browsers (especially iOS Safari) where 100vh includes address bar
+    function setViewportHeight() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
+
+    // Set on load and resize
+    setViewportHeight();
+    window.addEventListener("resize", setViewportHeight);
+    window.addEventListener("orientationchange", setViewportHeight);
+
+    // ========== DEVICE DETECTION ==========
+    const deviceInfo = {
+      isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
+      isAndroid: /Android/.test(navigator.userAgent),
+      isMobile:
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ),
+      isTablet: /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(
+        navigator.userAgent
+      ),
+      isDesktop:
+        !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ),
+      isLandscape: window.innerWidth > window.innerHeight,
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight,
+      pixelRatio: window.devicePixelRatio || 1,
+    };
+
+    // Add device classes to body for CSS targeting
+    if (deviceInfo.isIOS) document.body.classList.add("ios-device");
+    if (deviceInfo.isAndroid) document.body.classList.add("android-device");
+    if (deviceInfo.isMobile) document.body.classList.add("mobile-device");
+    if (deviceInfo.isTablet) document.body.classList.add("tablet-device");
+    if (deviceInfo.isDesktop) document.body.classList.add("desktop-device");
+
+    // Log device info for debugging
+    console.log("Device Info:", deviceInfo);
+
+    // ========== PREVENT ZOOM ON DOUBLE TAP (iOS) ==========
+    let lastTouchEnd = 0;
+    document.addEventListener(
+      "touchend",
+      function (event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      },
+      false
+    );
+
+    // ========== DISABLE PULL-TO-REFRESH ON MOBILE ==========
+    let startY = 0;
+    document.addEventListener(
+      "touchstart",
+      function (e) {
+        startY = e.touches[0].pageY;
+      },
+      { passive: true }
+    );
+
+    document.addEventListener(
+      "touchmove",
+      function (e) {
+        const y = e.touches[0].pageY;
+        // Prevent pull-to-refresh if at top of page
+        if (window.scrollY === 0 && y > startY) {
+          if (
+            !e.target.closest(
+              ".table-container, .bottom-section, .left-sidebar"
+            )
+          ) {
+            e.preventDefault();
+          }
+        }
+      },
+      { passive: false }
+    );
+
+    // ========== ORIENTATION CHANGE HANDLER ==========
+    window.addEventListener("orientationchange", function () {
+      // Wait for orientation change to complete
+      setTimeout(function () {
+        deviceInfo.isLandscape = window.innerWidth > window.innerHeight;
+        deviceInfo.screenWidth = window.innerWidth;
+        deviceInfo.screenHeight = window.innerHeight;
+        console.log(
+          "Orientation changed:",
+          deviceInfo.isLandscape ? "Landscape" : "Portrait"
+        );
+        setViewportHeight();
+      }, 100);
+    });
+
+    // ========== HANDLE ONLINE/OFFLINE STATUS ==========
+    window.addEventListener("online", function () {
+      console.log("Connection restored");
+      showToast && showToast("Connection restored", "success");
+    });
+
+    window.addEventListener("offline", function () {
+      console.log("Connection lost");
+      showToast && showToast("No internet connection", "error");
+    });
+
+    // ========== PERFORMANCE OPTIMIZATION ==========
+    // Lazy load images
+    if ("IntersectionObserver" in window) {
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute("data-src");
+              observer.unobserve(img);
+            }
+          }
+        });
+      });
+
+      // Observe all images with data-src attribute
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("img[data-src]").forEach((img) => {
+          imageObserver.observe(img);
+        });
+      });
+    }
+
+    // ========== AUTH STATE ==========
+    // Check authentication
+    const authState = {
+      isAuthenticated: false,
+      username: null,
+      uniqueid: null,
+      sessId: null,
+    };
+
+    // Check if user is logged in from localStorage
+    // In cockfighting page - checkAuth function
+    function checkAuth() {
+      const storedAuth = localStorage.getItem("authState");
+      if (!storedAuth) {
+        showToast("Please login to access this page", "error");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+        return false;
+      }
+
+      const authData = JSON.parse(storedAuth);
+      if (
+        !authData.isAuthenticated ||
+        !authData.sessId ||
+        !authData.uniqueid
+      ) {
+        showToast("Please login to access this page", "error");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+        return false;
+      }
+
+      // Update authState with stored data
+      authState.isAuthenticated = authData.isAuthenticated;
+      authState.username = authData.username;
+      authState.uniqueid = authData.uniqueid;
+      authState.sessId = authData.sessId;
+
+      // Update UI with username
+      document.getElementById("usernameDisplay").textContent =
+        authState.username;
+      return true;
+    }
+
+    // Toast notifications
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add("removing");
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // State management
+    const appState = {
+      data: null,
+      odds: {},
+      selectedBets: {},
+      betAmounts: {},
+      anyOddsState: {},
+      placingBet: {},
+      playerInfo: {},
+      historyData: null,
+      activeTab: "current",
+      currentMatch: null,
+    };
+
+    // API Functions
+    async function fetchLobbyData() {
+      if (!authState.sessId) return;
+
+      document.getElementById("loadingContainer").style.display = "flex";
+
+      try {
+        const bodyData = new URLSearchParams({
+          sess_id: authState.sessId,
+          uniqueid: authState.uniqueid,
+          lang: "zh-cn",
+        }).toString();
+
+        const api = "https://apih5.ho8.net/lobbyinfo.php";
+        const response = await fetch(api, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        });
+
+        const data = await response.json();
+        console.log("Lobby API Response:", data);
+
+        if (data.code === "B100") {
+          // Filter only CF01 matches
+          appState.data = {
+            ...data,
+            data: data.data.filter((match) => match.tableid === "CF01"),
+          };
+
+          if (appState.data.data.length > 0) {
+            appState.currentMatch = appState.data.data[0];
+            // Fetch odds for the current match
+            await fetchOdds(appState.currentMatch.no);
+            updateBettingUI();
+            showToast("Lobby data loaded successfully!", "success");
+          } else {
+            showToast("No matches available", "error");
+          }
+        } else {
+          showToast("Please re-log in", "error");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 2000);
+        }
+      } catch (error) {
+        console.error("Lobby API Error:", error);
+        // showToast("Network error. Failed to load lobby data.", "error");
+      } finally {
+        document.getElementById("loadingContainer").style.display = "none";
+      }
+    }
+
+    async function fetchOdds(roundNo) {
+      try {
+        const bodyData = new URLSearchParams({
+          sess_id: authState.sessId,
+          uniqueid: authState.uniqueid,
+          r_no: roundNo,
+        }).toString();
+
+        const api = "https://apih5.ho8.net/odds.php";
+        const response = await fetch(api, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        });
+
+        const data = await response.json();
+        console.log(`Odds API Response for ${roundNo}:`, data);
+
+        if (data.code === "B100") {
+          appState.odds[roundNo] = data;
+          updateOddsDisplay();
+        }
+      } catch (error) {
+        console.error(`Odds API Error for ${roundNo}:`, error);
+      }
+    }
+
+    async function fetchPlayerInfo() {
+      try {
+        const bodyData = new URLSearchParams({
+          sess_id: authState.sessId,
+          uniqueid: authState.uniqueid,
+        }).toString();
+
+        const api = "https://apih5.ho8.net/playerinfo.php";
+        const response = await fetch(api, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        });
+
+        const data = await response.json();
+        appState.playerInfo = data;
+        document.getElementById("balanceAmount").textContent = data.balance
+          ? `$${data.balance}`
+          : "$0.00";
+      } catch (error) {
+        console.error("Player Info API Error:", error);
+      }
+    }
+
+    // Add these variables at the top with your other state variables
+    let historyLoading = false;
+    let historyError = null;
+
+    // Fetch and display history data
+    async function fetchHistory() {
+      const spinIcon = document.querySelector(".refresh-icon");
+      const reportTableBody = document.getElementById("reportTableBody");
+
+      // Show loading animation
+      if (spinIcon) spinIcon.style.animation = "spin 1s linear infinite";
+
+      try {
+        const bodyData = new URLSearchParams({
+          sess_id: authState.sessId,
+          uniqueid: authState.uniqueid,
+        }).toString();
+
+        const api = "https://apih5.ho8.net/bethistory.php";
+        const response = await fetch(api, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        });
+
+        const data = await response.json();
+        console.log("History API Response:", data);
+
+        // Update the table with real data
+        updateReportTable(data);
+      } catch (error) {
+        console.error("History API Error:", error);
+        reportTableBody.innerHTML =
+          '<tr><td colspan="4" class="empty-state">Error loading reports</td></tr>';
+      } finally {
+        // Stop loading animation
+        if (spinIcon) spinIcon.style.animation = "";
+      }
+    }
+
+    // Update the report table with data
+    function updateReportTable(data) {
+      const reportTableBody = document.getElementById("reportTableBody");
+
+      if (!data || !data.settle || data.settle.length === 0) {
+        reportTableBody.innerHTML =
+          '<tr><td colspan="4" class="empty-state">No reports</td></tr>';
+        return;
+      }
+
+      // Clear and populate with real data
+      reportTableBody.innerHTML = "";
+
+      data.settle.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${item.w_t_id || "CF01"}</td>
+            <td>${item.w_betzone || "N/A"} (${item.w_bet_odds || "0.00"})</td>
+            <td>${item.w_win || "0"}</td>
+            <td>${formatTime(item.w_betdate)}</td>
+        `;
+        reportTableBody.appendChild(row);
+      });
+    }
+
+    // Format time from backend
+    function formatTime(dateStr) {
+      if (!dateStr) return "-";
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+      } catch (error) {
+        return dateStr;
+      }
+    }
+
+    // Global language dropdown helpers (available for inline handlers)
+    function toggleLanguageMenu(event) {
+      console.log("toggleLanguageMenu called!");
+      const button = document.getElementById("languageButton");
+      const menu = document.getElementById("languageMenu");
+      console.log("Button:", button, "Menu:", menu);
+      if (!button || !menu) {
+        console.error("Language button or menu not found!");
+        return;
+      }
+      if (event) event.stopPropagation();
+      const isOpen = menu.classList.contains("show");
+      console.log("Menu is open:", isOpen, "-> Toggling to:", !isOpen);
+      if (isOpen) {
+        menu.classList.remove("show");
+        button.classList.remove("open");
+        button.setAttribute("aria-expanded", "false");
+      } else {
+        menu.classList.add("show");
+        button.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+      }
+    }
+
+    // Hamburger menu toggle
+    function toggleHamburgerMenu(event) {
+      const menu = document.getElementById("hamburgerMenu");
+      if (!menu) return;
+      if (event) event.stopPropagation();
+      const isOpen = menu.classList.contains("show");
+      if (isOpen) {
+        menu.classList.remove("show");
+      } else {
+        menu.classList.add("show");
+      }
+    }
+
+    // Mode square menu toggle
+    function toggleModeSquareMenu(event) {
+      const menu = document.getElementById("modeSquareMenu");
+      if (!menu) return;
+      if (event) event.stopPropagation();
+      const isOpen = menu.classList.contains("show");
+      if (isOpen) {
+        menu.classList.remove("show");
+      } else {
+        menu.classList.add("show");
+      }
+    }
+
+    // Show info page handler
+    function showInfoPage(page) {
+      const menu = document.getElementById("modeSquareMenu");
+      if (menu) menu.classList.remove("show");
+      showToast(`Opening ${page}...`, "info");
+      // Add your page navigation logic here
+    }
+
+    // Navigation handler
+    function navigateTo(page) {
+      const menu = document.getElementById("hamburgerMenu");
+      if (menu) menu.classList.remove("show");
+      showToast(`Navigating to ${page}...`, "info");
+      // Add your navigation logic here
+    }
+
+    // Logout handler
+    function handleLogout() {
+      const menu = document.getElementById("hamburgerMenu");
+      if (menu) menu.classList.remove("show");
+      localStorage.removeItem("authState");
+      showToast("Logged out successfully", "info");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+    }
+
+    function selectLanguage(el) {
+      const label = document.getElementById("selectedLanguage");
+      const menu = document.getElementById("languageMenu");
+      const button = document.getElementById("languageButton");
+      if (!label || !menu || !button) return;
+      const newLabel =
+        el.getAttribute("data-label") || el.textContent.trim().toUpperCase();
+      label.textContent = newLabel;
+      // visual selected state
+      menu.querySelectorAll(".language-item").forEach(function (i) {
+        i.classList.remove("selected");
+      });
+      el.classList.add("selected");
+      menu.classList.remove("show");
+      button.classList.remove("open");
+      button.setAttribute("aria-expanded", "false");
+    }
+
+    // Outside click and ESC to close (global, once)
+    if (!window.__langGlobalBound) {
+      window.__langGlobalBound = true;
+      document.addEventListener("click", function (e) {
+        // Close language menu
+        const menu = document.getElementById("languageMenu");
+        const button = document.getElementById("languageButton");
+        if (menu && button) {
+          if (!menu.contains(e.target) && !button.contains(e.target)) {
+            menu.classList.remove("show");
+            button.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          }
+        }
+
+        // Close hamburger menu
+        const hamburgerMenu = document.getElementById("hamburgerMenu");
+        const hamburgerButton = document.getElementById("hamburgerButton");
+        if (hamburgerMenu && hamburgerButton) {
+          if (
+            !hamburgerMenu.contains(e.target) &&
+            !hamburgerButton.contains(e.target)
+          ) {
+            hamburgerMenu.classList.remove("show");
+          }
+        }
+
+        // Close mode square menu
+        const modeSquareMenu = document.getElementById("modeSquareMenu");
+        const modeSquareButton = document.getElementById("modeSquareButton");
+        if (modeSquareMenu && modeSquareButton) {
+          if (
+            !modeSquareMenu.contains(e.target) &&
+            !modeSquareButton.contains(e.target)
+          ) {
+            modeSquareMenu.classList.remove("show");
+          }
+        }
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          // Close language menu
+          const menu = document.getElementById("languageMenu");
+          const button = document.getElementById("languageButton");
+          if (menu && button) {
+            menu.classList.remove("show");
+            button.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          }
+
+          // Close hamburger menu
+          const hamburgerMenu = document.getElementById("hamburgerMenu");
+          if (hamburgerMenu) {
+            hamburgerMenu.classList.remove("show");
+          }
+
+          // Close mode square menu
+          const modeSquareMenu = document.getElementById("modeSquareMenu");
+          if (modeSquareMenu) {
+            modeSquareMenu.classList.remove("show");
+          }
+        }
+      });
+    }
+
+    // Tab switching function
+    // Tab switching function
+    function switchTab(tabName) {
+      const currentBetsContent =
+        document.getElementById("currentBetsContent");
+      const todayReportTable = document.getElementById("todayReportTable");
+      const todayTotalSection = document.getElementById("todayTotalSection");
+      const tabs = document.querySelectorAll(".tabs-container .tab");
+
+      // Remove active class from all tabs
+      tabs.forEach((tab) => tab.classList.remove("active"));
+
+      // Activate the correct tab by index (Current Bets = 0, Today Report = 1)
+      if (tabName === "current") {
+        tabs[0].classList.add("active");
+        currentBetsContent.style.display = "block";
+        todayReportTable.style.display = "none";
+        todayTotalSection.style.display = "none";
+      } else if (tabName === "report") {
+        tabs[1].classList.add("active");
+        currentBetsContent.style.display = "none";
+        todayReportTable.style.display = "block";
+        todayTotalSection.style.display = "block";
+        fetchHistory();
+      }
+    }
+
+    async function placeBet(matchKey) {
+      if (!appState.currentMatch) {
+        showToast("No match available", "error");
+        return;
+      }
+
+      const selectedBet = appState.selectedBets[matchKey];
+      const betAmount = appState.betAmounts[matchKey];
+      const anyOdds = appState.anyOddsState[matchKey] || false;
+
+      if (!selectedBet || !betAmount) {
+        showToast("Please select bet type and amount", "error");
+        return;
+      }
+
+      const matchOdds = appState.odds[appState.currentMatch.no];
+      if (!matchOdds || !matchOdds.data) {
+        showToast("Odds not available", "error");
+        return;
+      }
+
+      const oddsMap = {
+        meron: "M",
+        wala: "W",
+        draw: "D",
+      };
+
+      const oddsKey = Object.keys(matchOdds.data).find((key) =>
+        key.includes(`:${oddsMap[selectedBet]}`)
+      );
+
+      if (!oddsKey) {
+        showToast("Bet type not found in odds data", "error");
+        return;
+      }
+
+      const oddsData = matchOdds.data[oddsKey];
+      appState.placingBet[matchKey] = true;
+      updateBettingUI();
+
+      try {
+        const uniqueId = generateUniqueId();
+        const bodyData = new URLSearchParams({
+          t_id: "CF01",
+          r_id: appState.currentMatch.trid.toString(),
+          sess_id: authState.sessId,
+          uniqueid: uniqueId,
+          type: oddsData.o_bettype.toString(),
+          zone: oddsData.o_opentype,
+          amount: betAmount.toString(),
+          anyodds: anyOdds ? "Y" : "N",
+          odds: oddsData.o_odds,
+        }).toString();
+
+        const api = "https://apih5.ho8.net/bet_cflive.php";
+        const response = await fetch(api, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: bodyData,
+        });
+
+        const data = await response.json();
+        console.log("Bet API Response:", data);
+
+        if (data.code === "B100") {
+          showToast(
+            `Bet placed successfully! ${selectedBet.toUpperCase()} - $${betAmount}`,
+            "success"
+          );
+          clearBet(matchKey);
+          fetchPlayerInfo(); // Update balance
+        } else {
+          showToast(data.msg || "Failed to place bet", "error");
+        }
+      } catch (error) {
+        console.error("Bet API Error:", error);
+        showToast("Network error. Failed to place bet.", "error");
+      } finally {
+        appState.placingBet[matchKey] = false;
+        updateBettingUI();
+      }
+    }
+
+    function generateUniqueId() {
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+      const length = Math.floor(Math.random() * 3) + 8;
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    // UI Functions
+    function switchTab(tab, event) {
+      appState.activeTab = tab;
+
+      document
+        .querySelectorAll(".tabs-container .tab")
+        .forEach((btn) => btn.classList.remove("active"));
+
+      // Add active class to the target button if event is provided
+      if (event && event.target) {
+        event.target.classList.add("active");
+      } else {
+        // Fallback: activate the first button for "current" tab
+        const targetBtn = document.querySelector(
+          `.tabs-container .tab[onclick*="${tab}"]`
+        );
+        if (targetBtn) targetBtn.classList.add("active");
+      }
+
+      const reportHeader = document.getElementById("reportHeader");
+
+      if (tab === "current") {
+        document.getElementById("currentBetsContent").style.display = "block";
+        document.getElementById("todayReportTable").style.display = "none";
+        document.getElementById("todayTotalSection").style.display = "none";
+        if (reportHeader) reportHeader.style.display = "none";
+        renderCurrentBets();
+      } else if (tab === "report") {
+        document.getElementById("currentBetsContent").style.display = "none";
+        document.getElementById("todayReportTable").style.display = "block";
+        document.getElementById("todayTotalSection").style.display = "block";
+        if (reportHeader) reportHeader.style.display = "flex";
+        fetchHistory();
+      }
+    }
+
+    function handleBetSelect(matchKey, betType) {
+      if (!appState.currentMatch || appState.currentMatch.roundstatus !== 1) {
+        showToast("Betting is currently closed", "error");
+        return;
+      }
+
+      appState.selectedBets[matchKey] = betType;
+      updateBettingUI();
+      renderCurrentBets();
+    }
+
+    function handleBetAmount(matchKey, amount) {
+      if (!appState.currentMatch || appState.currentMatch.roundstatus !== 1) {
+        showToast("Betting is currently closed", "error");
+        return;
+      }
+
+      appState.betAmounts[matchKey] = amount;
+      updateBettingUI();
+      renderCurrentBets();
+    }
+
+    function toggleAnyOdds(matchKey) {
+      if (!appState.currentMatch || appState.currentMatch.roundstatus !== 1) {
+        showToast("Betting is currently closed", "error");
+        return;
+      }
+
+      appState.anyOddsState[matchKey] = !appState.anyOddsState[matchKey];
+      updateBettingUI();
+      renderCurrentBets();
+    }
+
+    function clearBet(matchKey) {
+      appState.selectedBets[matchKey] = "";
+      appState.betAmounts[matchKey] = 0;
+      appState.anyOddsState[matchKey] = false;
+      updateBettingUI();
+      renderCurrentBets();
+    }
+
+    function clearAllBets() {
+      appState.selectedBets = {};
+      appState.betAmounts = {};
+      appState.anyOddsState = {};
+      updateBettingUI();
+      renderCurrentBets();
+      showToast("Cleared all current bets", "success");
+    }
+
+    // Settings Menu Functions
+    function toggleSettingsMenu() {
+      const settingsMenu = document.getElementById('settingsMenu');
+      const isVisible = settingsMenu.style.display !== 'none';
+      
+      if (isVisible) {
+        settingsMenu.style.display = 'none';
+      } else {
+        settingsMenu.style.display = 'flex';
+      }
+    }
+
+    function handleCustomAmount() {
+      const customAmountInput = document.getElementById('customAmount');
+      const amount = parseInt(customAmountInput.value);
+      
+      if (!amount || amount < 1 || amount > 9999) {
+        showToast("Please enter a valid amount between 1 and 9999", "error");
+        return;
+      }
+      
+      // Use the existing handleBetAmount function with 'main' as matchKey
+      handleBetAmount('main', amount);
+      customAmountInput.value = ''; // Clear input
+      showToast(`Custom amount $${amount} applied`, "success");
+    }
+
+    function setMaxBet() {
+      // Set maximum bet amount (you can adjust this value)
+      const maxAmount = 1000;
+      handleBetAmount('main', maxAmount);
+      showToast(`Max bet $${maxAmount} applied`, "success");
+    }
+
+    // Close settings menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const settingsMenu = document.getElementById('settingsMenu');
+      const settingsBtn = document.getElementById('settingsBtn');
+      
+      if (settingsMenu && settingsMenu.style.display === 'flex' && 
+          !settingsMenu.contains(event.target) && 
+          !settingsBtn.contains(event.target)) {
+        toggleSettingsMenu();
+      }
+    });
+
+    // Close settings menu with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        const settingsMenu = document.getElementById('settingsMenu');
+        if (settingsMenu && settingsMenu.style.display === 'flex') {
+          toggleSettingsMenu();
+        }
+      }
+    });
+
+    function updateOddsDisplay() {
+      if (!appState.currentMatch) return;
+
+      const matchOdds = appState.odds[appState.currentMatch.no];
+      if (!matchOdds || !matchOdds.data) return;
+
+      // Update odds display
+      document.getElementById("meronOdds").textContent = getOdds(
+        appState.currentMatch,
+        "meron"
+      );
+      document.getElementById("drawOdds").textContent = getOdds(
+        appState.currentMatch,
+        "draw"
+      );
+      document.getElementById("walaOdds").textContent = getOdds(
+        appState.currentMatch,
+        "wala"
+      );
+    }
+
+    function updateBettingUI() {
+      const isBettingOpen =
+        appState.currentMatch && appState.currentMatch.roundstatus === 1;
+      const selectedBet = appState.selectedBets["main"];
+      const betAmount = appState.betAmounts["main"] || 0;
+      const anyOdds = appState.anyOddsState["main"] || false;
+      const isPlacingBet = appState.placingBet["main"] || false;
+
+      // Update status
+      const statusBox = document.getElementById("statusBox");
+      if (!isBettingOpen) {
+        // statusBox.style.display = "block";
+        statusBox.style.display = "none";
+        // statusBox.textContent = "Betting Closed";
+        statusBox.textContent = "Betting Closed";
+      } else {
+        statusBox.style.display = "none";
+      }
+
+      // Update bet options
+      // Update bet options
+      document.querySelectorAll(".bet-option").forEach((opt) => {
+        const betType = opt.dataset.bet;
+        opt.classList.remove(
+          "active-red",
+          "active-blue",
+          "active-green",
+          "disabled"
+        );
+
+        if (!isBettingOpen) {
+          // When round closed, gray them out
+          opt.classList.add("disabled");
+        } else {
+          // Show all colored backgrounds when open
+          opt.classList.remove("disabled");
+
+          // Highlight border only on selected one
+          if (selectedBet === betType) {
+            if (betType === "meron") opt.classList.add("active-red");
+            else if (betType === "wala") opt.classList.add("active-blue");
+            else if (betType === "draw") opt.classList.add("active-green");
+          }
+        }
+      });
+
+      // Update chips
+      document.querySelectorAll(".chip-button").forEach((btn) => {
+        const amount = parseInt(btn.dataset.amount);
+        const inner = btn.querySelector(".chip-inner");
+        btn.disabled = !isBettingOpen;
+        inner.classList.toggle("glow", betAmount === amount && isBettingOpen);
+      });
+
+      // Update action buttons
+      document.getElementById("anyOddsBtn").className = anyOdds
+        ? "betBtnActive"
+        : "betBtn";
+      document.getElementById("anyOddsBtn").disabled = !isBettingOpen;
+
+      const canPlaceBet =
+        isBettingOpen && selectedBet && betAmount > 0 && !isPlacingBet;
+      document.getElementById("placeBetBtn").className = canPlaceBet
+        ? "betBtnActive"
+        : "betBtn";
+      document.getElementById("placeBetBtn").disabled = !canPlaceBet;
+      document.getElementById("placeBetBtn").textContent = isPlacingBet
+        ? "..."
+        : "✓";
+
+      document.getElementById("clearBtn").disabled = !isBettingOpen;
+
+      // Update current bet display
+      const currentBetBox = document.getElementById("currentBetBox");
+      const betName = document.getElementById("betName");
+      const betValue = document.getElementById("betValue");
+      const anyOddsTag = document.getElementById("anyOddsTag");
+
+      if (selectedBet && betAmount > 0) {
+        // currentBetBox.style.display = "block";
+        currentBetBox.style.display = "none";
+        betName.textContent = selectedBet;
+        betValue.textContent = `$${betAmount}`;
+        anyOddsTag.style.display = anyOdds ? "inline" : "none";
+      } else {
+        currentBetBox.style.display = "none";
+      }
+    }
+
+    function getOdds(match, betType) {
+      const matchOdds = appState.odds[match.no];
+      if (!matchOdds || !matchOdds.data) return "0.00";
+
+      const oddsMap = {
+        meron: "M",
+        wala: "W",
+        draw: "D",
+      };
+
+      const oddsKey = Object.keys(matchOdds.data).find((key) =>
+        key.includes(`:${oddsMap[betType]}`)
+      );
+
+      return oddsKey ? matchOdds.data[oddsKey].o_odds : "0.00";
+    }
+
+    function renderCurrentBets() {
+      const container = document.getElementById("currentBetsContent");
+      const hasBets = Object.values(appState.selectedBets).some((v) => v);
+
+      if (!hasBets) {
+        container.innerHTML =
+          '<div class="empty-state">No current bets</div>';
+        return;
+      }
+
+      const bets = Object.keys(appState.selectedBets)
+        .filter((key) => appState.selectedBets[key])
+        .map((key) => {
+          const bet = appState.selectedBets[key];
+          const amount = appState.betAmounts[key] || 0;
+          const anyOdds = appState.anyOddsState[key];
+
+          return `
+              <div style="padding: 10px; border-bottom: 1px solid #333;">
+                <div style="font-weight: bold;">${bet.toUpperCase()}</div>
+                <div>Amount: $${amount} ${anyOdds ? "(Any Odds)" : ""}</div>
+                <button onclick="clearBet('${key}')" style="margin-top: 5px; padding: 2px 8px; background: #dc2626; color: white; border: none; border-radius: 3px; cursor: pointer;">Clear</button>
+              </div>
+            `;
+        })
+        .join("");
+
+      container.innerHTML = bets;
+    }
+
+    function renderHistory() {
+      const container = document.getElementById("reportContent");
+
+      if (!appState.historyData || appState.historyData.length === 0) {
+        container.innerHTML =
+          '<div class="empty-state">No history available for today.</div>';
+        return;
+      }
+
+      // Simple history display - you can enhance this based on your data structure
+      let historyHTML =
+        "<table><thead><tr><th>Time</th><th>Bet</th><th>Amount</th><th>Result</th></tr></thead><tbody>";
+
+      appState.historyData.forEach((item) => {
+        // Adjust this based on your actual history data structure
+        historyHTML += `
+            <tr>
+              <td>${new Date().toLocaleTimeString()}</td>
+              <td>${item.bet_type || "N/A"}</td>
+              <td>${item.amount || "0"}</td>
+              <td>${item.result || "Pending"}</td>
+            </tr>
+          `;
+      });
+
+      historyHTML += "</tbody></table>";
+      container.innerHTML = historyHTML;
+    }
+
+    // Initialize
+    window.onload = function () {
+      if (!checkAuth()) return;
+
+      fetchLobbyData();
+      fetchPlayerInfo();
+
+      // Set up tab switching
+      switchTab("current");
+
+      // Auto-refresh every 30 seconds
+      setInterval(() => {
+        fetchLobbyData();
+        fetchPlayerInfo();
+      }, 30000);
+
+      // Initialize existing UI functionality
+      initializeExistingUI();
+    };
+
+    // Global functions for top language dropdown
+    function toggleTopLangMenu(event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      const langToggle = document.getElementById("langToggle");
+      const langMenu = document.getElementById("langMenu");
+
+      if (!langToggle || !langMenu) return;
+
+      const isCurrentlyOpen = langMenu.style.display === "block";
+
+      // Close all other open dropdowns first
+      closeAllDropdowns();
+
+      // Toggle this one
+      if (isCurrentlyOpen) {
+        closeLangMenu();
+      } else {
+        openLangMenu();
+      }
+    }
+
+    function openLangMenu() {
+      const langMenu = document.getElementById("langMenu");
+      const langToggle = document.getElementById("langToggle");
+      langMenu.style.display = "block";
+      langToggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closeLangMenu() {
+      const langMenu = document.getElementById("langMenu");
+      const langToggle = document.getElementById("langToggle");
+      langMenu.style.display = "none";
+      langToggle.setAttribute("aria-expanded", "false");
+    }
+
+    function closeAllDropdowns() {
+      const langMenu = document.getElementById("langMenu");
+      const langToggle = document.getElementById("langToggle");
+      langMenu.style.display = "none";
+      langToggle.setAttribute("aria-expanded", "false");
+    }
+
+    // Better click outside handler
+    document.addEventListener("click", function (e) {
+      const langToggle = document.getElementById("langToggle");
+      const langMenu = document.getElementById("langMenu");
+
+      if (langToggle && langMenu && !langToggle.contains(e.target)) {
+        closeLangMenu();
+      }
+    });
+
+    // Also close when pressing Escape key
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        closeLangMenu();
+      }
+    });
+
+    function selectTopLang(event, lang) {
+      event.stopPropagation();
+      const langLabel = document.getElementById("langLabel");
+      const langMenu = document.getElementById("langMenu");
+      const langToggle = document.getElementById("langToggle");
+
+      if (!langLabel || !langMenu || !langToggle) return;
+
+      // Update label
+      langLabel.textContent = lang.toUpperCase();
+
+      // Update selected state
+      langMenu.querySelectorAll(".lang-item").forEach((item) => {
+        item.classList.remove("selected");
+        if (item.dataset.lang === lang) {
+          item.classList.add("selected");
+        }
+      });
+
+      // Close menu
+      langMenu.classList.remove("show");
+      langToggle.setAttribute("aria-expanded", "false");
+
+      console.log("Language changed to:", lang);
+      showToast(`Language changed to ${lang}`, "info");
+    }
+
+    // Close language menu when clicking outside
+    document.addEventListener("click", function (e) {
+      const langToggle = document.getElementById("langToggle");
+      const langMenu = document.getElementById("langMenu");
+
+      if (langToggle && langMenu && !langToggle.contains(e.target)) {
+        langMenu.classList.remove("show");
+        langToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    function initializeExistingUI() {
+      console.log("Initializing UI elements...");
+
+      // Language dropdown interactions
+      const langToggle = document.getElementById("langToggle");
+      const langMenu = document.getElementById("langMenu");
+      const langLabel = document.getElementById("langLabel");
+
+      if (langToggle && langMenu && langLabel) {
+        console.log("Found language dropdown elements");
+
+        function closeLangMenu() {
+          langMenu.classList.remove("show");
+          langToggle.setAttribute("aria-expanded", "false");
+        }
+
+        langToggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          console.log("Language toggle clicked!");
+          const isOpen = langMenu.classList.toggle("show");
+          langToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        langMenu.querySelectorAll(".lang-item").forEach((item) => {
+          item.addEventListener("click", (e) => {
+            e.stopPropagation();
+            console.log("Language item clicked:", item.dataset.lang);
+            langMenu
+              .querySelectorAll(".lang-item")
+              .forEach((i) => i.classList.remove("selected"));
+            item.classList.add("selected");
+            langLabel.textContent = item.dataset.lang.toUpperCase();
+            closeLangMenu();
+
+            // Show selected language in toast for confirmation
+            showToast(`Language changed to ${item.dataset.lang}`, "info");
+          });
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!langToggle.contains(e.target)) {
+            closeLangMenu();
+          }
+        });
+
+        console.log("Language dropdown initialized successfully");
+      }
+
+      // Tab selection via event delegation (supports dynamic content)
+      document.querySelectorAll(".tabbar").forEach((bar) => {
+        bar.addEventListener("click", (event) => {
+          const button = event.target.closest(".tab");
+          if (!button || !bar.contains(button)) return;
+
+          bar
+            .querySelectorAll(".tab")
+            .forEach((t) => t.classList.remove("tab--active"));
+          button.classList.add("tab--active");
+        });
+      });
+
+      // Ensure global language helpers exist
+      if (typeof window.toggleLanguageMenu !== "function") {
+        window.toggleLanguageMenu = function (event) {
+          const button = document.getElementById("languageButton");
+          const menu = document.getElementById("languageMenu");
+          if (!button || !menu) return;
+          event && event.stopPropagation();
+          const isOpen = menu.classList.contains("show");
+          if (isOpen) {
+            menu.classList.remove("show");
+            button.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          } else {
+            menu.classList.add("show");
+            button.classList.add("open");
+            button.setAttribute("aria-expanded", "true");
+          }
+        };
+      }
+
+      if (typeof window.selectLanguage !== "function") {
+        window.selectLanguage = function (el) {
+          const label = document.getElementById("selectedLanguage");
+          const menu = document.getElementById("languageMenu");
+          const button = document.getElementById("languageButton");
+          if (!label || !menu || !button) return;
+          const newLabel =
+            el.getAttribute("data-label") ||
+            el.textContent.trim().toUpperCase();
+          label.textContent = newLabel;
+          menu.classList.remove("show");
+          button.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+        };
+      }
+
+      // Robust outside click/escape close
+      if (!window.__langOutsideBound) {
+        window.__langOutsideBound = true;
+        document.addEventListener("click", function (e) {
+          const menu = document.getElementById("languageMenu");
+          const button = document.getElementById("languageButton");
+          if (!menu || !button) return;
+          if (!menu.contains(e.target) && !button.contains(e.target)) {
+            menu.classList.remove("show");
+            button.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          }
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            const menu = document.getElementById("languageMenu");
+            const button = document.getElementById("languageButton");
+            if (!menu || !button) return;
+            menu.classList.remove("show");
+            button.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    }
+
+    const betOptions = document.querySelectorAll(".bet-option");
+
+    function setBettingState(isOpen) {
+      betOptions.forEach((btn) => {
+        if (isOpen) {
+          btn.classList.remove("disabled");
+        } else {
+          btn.classList.add("disabled");
+          btn.classList.remove("active");
+        }
+      });
+    }
+
+    betOptions.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.classList.contains("disabled")) return;
+        betOptions.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    // Example control
+    // setBettingState(true);  // show red/green/blue
+    // setBettingState(false); // gray out
+
+    // Baccarat Board Logic
+    /*
+      DATA MODEL
+      ----------
+      Each column is an object:
+        { offset: <0..5>, cells: [ {color:'red'|'blue'|'green', tie?:boolean}, ... ] }
+
+      offset = number of empty squares before the first circle in that column (to create those "drops").
+      Only 6 rows are rendered (0..5), matching the typical Big Road height.
+    */
+
+    const baccaratDemoData = (() => {
+      // Create ~70 columns that roughly match the vibe of the screenshot:
+      const cols = [];
+
+      // Helper to push a column quickly
+      const add = (offset, color, len, addTie = false) => {
+        const cells = Array.from({ length: len }, () => ({ color }));
+        if (addTie && cells.length) cells[cells.length - 1].tie = true;
+        cols.push({ offset, cells });
+      };
+
+      // Mostly top-row singles with occasional drops/streaks
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'red', 1);
+      add(2, 'blue', 3);     // drop 1
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'blue', 1);
+      add(3, 'blue', 3);     // drop 2
+      add(0, 'red', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(2, 'blue', 2);     // drop 3
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'blue', 1);
+      add(4, 'blue', 2);     // deep drop
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(2, 'blue', 3);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(3, 'blue', 3);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(4, 'blue', 2);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(3, 'blue', 3);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(2, 'blue', 2);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'blue', 1);
+      add(0, 'red', 1);
+      add(0, 'red', 1, true);  // add tie mark in one cell to show variant
+      // Ending with a green circle near the right edge like in the screenshot
+      add(1, 'green', 1);
+      return cols;
+    })();
+
+    /* --- Render Baccarat Board --- */
+    const baccaratGridEl = document.getElementById('baccaratGrid');
+
+    function renderBaccaratBoard(columns) {
+      // Clear existing content
+      baccaratGridEl.innerHTML = '';
+
+      // Set the number of columns for CSS grid by adding empty spacers
+      // (We'll place real cells precisely via grid coordinates.)
+      baccaratGridEl.style.gridTemplateColumns = `repeat(${columns.length}, var(--baccarat-cell))`;
+
+      let r = 0, b = 0, g = 0;
+
+      columns.forEach((col, cIdx) => {
+        const startRow = 1 + (col.offset ?? 0);             // CSS grid rows are 1-based
+        (col.cells || []).slice(0, 6 - (col.offset || 0)).forEach((cell, i) => {
+          const el = document.createElement('div');
+          el.className = 'baccarat-cell';
+          el.style.gridColumn = `${cIdx + 1}`;
+          el.style.gridRow = `${startRow + i}`;
+
+          const disc = document.createElement('div');
+          disc.className = `baccarat-disc ${cell.color}${cell.tie ? ' tie' : ''}`;
+          el.appendChild(disc);
+          baccaratGridEl.appendChild(el);
+
+          if (cell.color === 'red') r++;
+          else if (cell.color === 'blue') b++;
+          else if (cell.color === 'green') g++;
+        });
+      });
+
+      // Update counts
+      document.getElementById('baccaratRedCount').textContent = r;
+      document.getElementById('baccaratBlueCount').textContent = b;
+      document.getElementById('baccaratGreenCount').textContent = g;
+    }
+
+    // Initialize the Baccarat Board
+    renderBaccaratBoard(baccaratDemoData);
+
+    // Optional: auto-scroll to the far right so the scrollbar is obvious
+    setTimeout(() => {
+      document.querySelector('.baccarat-scroller').scrollLeft = 99999;
+    }, 100);
+  </script>
+</body>
+
+</html>
